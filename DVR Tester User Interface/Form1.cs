@@ -20,6 +20,26 @@ namespace DVR_Tester_User_Interface
         public Form1()
         {
             InitializeComponent();
+            textBox1.Text = "0";
+            textBox2.Text = "0";
+            textBox3.Text = "0";
+            textBox4.Text = "0";
+            textBox5.Text = "0";
+            textBox6.Text = "0";
+            textBox7.Text = "0";
+            textBox8.Text = "0";
+            textBox9.Text = "0";
+            textBox10.Text = "0";
+            textBox11.Text = "0";
+            textBox12.Text = "0";
+            textBox13.Text = "0";
+            textBox14.Text = "0";
+            textBox15.Text = "0";
+            textBox16.Text = "0";
+            textBox17.Text = "0";
+            textBox18.Text = "0";
+            textBox19.Text = "0";
+            textBox20.Text = "0";
             for (int i = 0; i < 16; ++i)
             {
                 Audio_Chnls[i] = new Test_Paramater();
@@ -28,43 +48,100 @@ namespace DVR_Tester_User_Interface
                 Relay_Outpts[i] = new Test_Paramater();
             }
             for( int i = 0; i < 6; ++i)
-            {   Analog_Inpts[i] = new Test_Paramater();}
+            { Analog_Inpts[i] = new Test_Paramater(); }
+
+            Digital_Inputs.Tag = 0;
+            Analog_Inputs.Tag = 0;
+            Audio_Channels.Tag = 0;
+            Video_Channels.Tag = 0;
+            Relay_Outputs.Tag = 0; 
+
             Digital_Inputs.SelectedIndex = 0;
             Analog_Inputs.SelectedIndex = 0;
             Audio_Channels.SelectedIndex = 0;
             Video_Channels.SelectedIndex = 0;
-            Relay_Outputs.SelectedIndex = 0;
+            Relay_Outputs.SelectedIndex = 0; 
         }
 
         private void Audio_Channels_SelectedIndexChanged(object sender, EventArgs e)
         {
-            checkBox1.Checked = !Audio_Chnls[Audio_Channels.SelectedIndex].enabled;
-            textBox2.Text = Audio_Chnls[Audio_Channels.SelectedIndex].delay.ToString();
+            Audio_Chnls[(int)(Audio_Channels.Tag)].delay = long.Parse(textBox2.Text);
+            Audio_Chnls[(int)(Audio_Channels.Tag)].timeOn = long.Parse(textBox11.Text);
+            Audio_Chnls[(int)(Audio_Channels.Tag)].timeOff = long.Parse(textBox16.Text);
+
+            if (Audio_Channels.SelectedIndex >= 0)
+            {
+                Audio_Channels.Tag = Audio_Channels.SelectedIndex;
+                checkBox1.Checked = !Audio_Chnls[Audio_Channels.SelectedIndex].enabled;
+                textBox2.Text = Audio_Chnls[Audio_Channels.SelectedIndex].delay.ToString();
+                textBox11.Text = Audio_Chnls[Audio_Channels.SelectedIndex].timeOn.ToString();
+                textBox16.Text = Audio_Chnls[Audio_Channels.SelectedIndex].timeOff.ToString();
+            }
         }
 
         private void Video_Channels_SelectedIndexChanged(object sender, EventArgs e)
         {
-            checkBox2.Checked = !Video_Chnls[Video_Channels.SelectedIndex].enabled;
-            textBox3.Text = Video_Chnls[Video_Channels.SelectedIndex].delay.ToString();
+            Video_Chnls[(int)(Video_Channels.Tag)].delay = long.Parse(textBox3.Text);
+            Video_Chnls[(int)(Video_Channels.Tag)].timeOn = long.Parse(textBox12.Text);
+            Video_Chnls[(int)(Video_Channels.Tag)].timeOff = long.Parse(textBox17.Text);
+
+            if (Video_Channels.SelectedIndex >= 0)
+            {
+                Video_Channels.Tag = Video_Channels.SelectedIndex;
+                checkBox2.Checked = !Video_Chnls[Video_Channels.SelectedIndex].enabled;
+                textBox3.Text = Video_Chnls[Video_Channels.SelectedIndex].delay.ToString();
+                textBox12.Text = Video_Chnls[Video_Channels.SelectedIndex].timeOn.ToString();
+                textBox17.Text = Video_Chnls[Video_Channels.SelectedIndex].timeOff.ToString();
+            }
         }
 
         private void Analog_Inputs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Analog_Inpts[(int)(Analog_Inputs.Tag)].delay = long.Parse(textBox4.Text);
+            Analog_Inpts[(int)(Analog_Inputs.Tag)].timeOn = long.Parse(textBox13.Text);
+            Analog_Inpts[(int)(Analog_Inputs.Tag)].timeOff = long.Parse(textBox18.Text);
 
-            checkBox3.Checked = !Analog_Inpts[Analog_Inputs.SelectedIndex].enabled;
-            textBox4.Text = Analog_Inpts[Analog_Inputs.SelectedIndex].delay.ToString();
+            if (Analog_Inputs.SelectedIndex >= 0)
+            {
+                Analog_Inputs.Tag = Analog_Inputs.SelectedIndex;
+
+                checkBox3.Checked = !Analog_Inpts[Analog_Inputs.SelectedIndex].enabled;
+                textBox4.Text = Analog_Inpts[Analog_Inputs.SelectedIndex].delay.ToString();
+                textBox13.Text = Analog_Inpts[Analog_Inputs.SelectedIndex].timeOn.ToString();
+                textBox18.Text = Analog_Inpts[Analog_Inputs.SelectedIndex].timeOff.ToString();
+            }
         }
 
         private void Digital_Inputs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            checkBox4.Checked = !Digital_Inpts[Digital_Inputs.SelectedIndex].enabled;
-            textBox5.Text = Digital_Inpts[Digital_Inputs.SelectedIndex].delay.ToString();
+            Digital_Inpts[(int)(Digital_Inputs.Tag)].delay = long.Parse(textBox5.Text);
+            Digital_Inpts[(int)(Digital_Inputs.Tag)].timeOn = long.Parse(textBox14.Text);
+            Digital_Inpts[(int)(Digital_Inputs.Tag)].timeOff = long.Parse(textBox19.Text);
+
+            if ( Digital_Inputs.SelectedIndex >= 0)
+            {
+                Digital_Inputs.Tag = Digital_Inputs.SelectedIndex;
+                checkBox4.Checked = !Digital_Inpts[Digital_Inputs.SelectedIndex].enabled;
+                textBox5.Text = Digital_Inpts[Digital_Inputs.SelectedIndex].delay.ToString();
+                textBox14.Text = Digital_Inpts[Digital_Inputs.SelectedIndex].timeOn.ToString();
+                textBox19.Text = Digital_Inpts[Digital_Inputs.SelectedIndex].timeOff.ToString();
+            }
         }
 
         private void Relay_Outputs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            checkBox5.Checked = !Relay_Outpts[Relay_Outputs.SelectedIndex].enabled;
-            textBox1.Text = Relay_Outpts[Relay_Outputs.SelectedIndex].delay.ToString();
+            Relay_Outpts[(int)(Relay_Outputs.Tag)].delay = long.Parse(textBox1.Text);
+            Relay_Outpts[(int)(Relay_Outputs.Tag)].timeOn = long.Parse(textBox15.Text);
+            Relay_Outpts[(int)(Relay_Outputs.Tag)].timeOff = long.Parse(textBox20.Text);
+
+            if (Relay_Outputs.SelectedIndex >= 0)
+            {
+                Relay_Outputs.Tag = Relay_Outputs.SelectedIndex;
+                checkBox5.Checked = !Relay_Outpts[Relay_Outputs.SelectedIndex].enabled;
+                textBox1.Text = Relay_Outpts[Relay_Outputs.SelectedIndex].delay.ToString();
+                textBox15.Text = Relay_Outpts[Relay_Outputs.SelectedIndex].timeOn.ToString();
+                textBox20.Text = Relay_Outpts[Relay_Outputs.SelectedIndex].timeOff.ToString();
+            }
 
         }
 
@@ -134,47 +211,50 @@ namespace DVR_Tester_User_Interface
 
         }
 
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
-            Audio_Chnls[Audio_Channels.SelectedIndex].delay = long.Parse(textBox2.Text);
+            if (SaveName.Visible == true)
+            {
+                SaveName.Visible = false;
+                button4.Visible = true;
+                SaveList.Items.Add(SaveName.Text);
+                label12.Text = "Test Name: " + SaveName.Text;
+            }
+            else
+            {
+                SaveName.Visible = true;
+                SaveName.Text = "";
+                button4.Visible = false;
+            }
         }
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
-            Video_Chnls[Video_Channels.SelectedIndex].delay = long.Parse(textBox3.Text);
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-             Analog_Inpts[Analog_Inputs.SelectedIndex].delay = long.Parse(textBox4.Text);
-        }
-
-        private void textBox5_TextChanged(object sender, EventArgs e)
-        {
-           Digital_Inpts[Digital_Inputs.SelectedIndex].delay = long.Parse(textBox5.Text);
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            Relay_Outpts[Relay_Outputs.SelectedIndex].delay = long.Parse(textBox1.Text);
-        }
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
+            if (SaveList.Visible == true)
+            {
+                SaveList.Visible = false;
+                button3.Visible = true;
+                if (SaveList.SelectedIndex >= 0)
+                {
+                    label12.Text = "Test Name: " + SaveList.SelectedItem.ToString();
+                }
+                else
+                {
+                    label12.Text = "Test Name: ";
+                }
+            }
+            else
+            {
+                SaveList.Visible = true;
+                button3.Visible = false;
+            }
 
         }
 
-        private void Settings_Click(object sender, EventArgs e)
+        private void label12_Click(object sender, EventArgs e)
         {
 
         }
-
-
 
     }
     public class Test_Paramater
@@ -183,8 +263,13 @@ namespace DVR_Tester_User_Interface
         {
             enabled = true;
             delay = 0;
+            timeOn = 0;
+            timeOff = 0;
         }
         public bool enabled;
         public long delay;
+        public long timeOn;
+        public long timeOff;
+        public int lastIndex;
     }
 }
