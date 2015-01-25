@@ -256,6 +256,156 @@ namespace DVR_Tester_User_Interface
 
         }
 
+        private void label16_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label18_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Com_Port_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Real_Time_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label47_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label31_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label184_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox78_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox71_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox68_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox87_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox87.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox87.Text = "Low";
+            }
+            else
+            {
+                checkBox87.Text = "High";
+            }
+        }
+
+        private void checkBox72_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox74_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox74.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox74.Text = "Low";
+            }
+            else
+            {
+                checkBox74.Text = "High";
+            }
+        }
+
+        private void checkBox79_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox79.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox79.Text = "Low";
+            }
+            else
+            {
+                checkBox79.Text = "High";
+            }
+        }
+
+        private void checkBox60_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox60.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox60.Text = "Low";
+            }
+            else
+            {
+                checkBox60.Text = "High";
+            }
+        }
+
+        private void checkBox54_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox54.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox54.Text = "Low";
+            }
+            else
+            {
+                checkBox54.Text = "High";
+            }
+        }
+
+        private void label28_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
     public class Test_Paramater
     {
