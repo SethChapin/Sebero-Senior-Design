@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace DVR_Tester_User_Interface
 {
@@ -14,9 +15,9 @@ namespace DVR_Tester_User_Interface
     {
             Test_Paramater[] Audio_Chnls = new Test_Paramater[16];   //Defines the paramaters for each audio channel
             Test_Paramater[] Video_Chnls = new Test_Paramater[16];   //Defines the paramaters for each Video channel
-            Test_Paramater[] Analog_Inpts = new Test_Paramater[6];   //Defines the paramaters for each Analog channel
+            Test_Paramater[] Analog_Inpts = new Test_Paramater[4];   //Defines the paramaters for each Analog channel
             Test_Paramater[] Digital_Inpts = new Test_Paramater[16]; //Defines the paramaters for each Digital channel
-            Test_Paramater[] Relay_Outpts = new Test_Paramater[16];  //Defines the paramaters for each Relay Output
+            Test_Paramater[] Relay_Outpts = new Test_Paramater[4];  //Defines the paramaters for each Relay Output
         public Form1()
         {
             InitializeComponent();
@@ -44,14 +45,16 @@ namespace DVR_Tester_User_Interface
             //Initializing each of the channels
             for (int i = 0; i < 16; ++i)
             {
-                Audio_Chnls[i] = new Test_Paramater();
-                Video_Chnls[i] = new Test_Paramater();
-                Digital_Inpts[i] = new Test_Paramater();
-                Relay_Outpts[i] = new Test_Paramater();
+                Audio_Chnls[i] = new Test_Paramater("Audio_Channel_"+i);
+                Video_Chnls[i] = new Test_Paramater("Video_Channel_" + i);
+                Digital_Inpts[i] = new Test_Paramater("Digital_Input_" + i);
             }
             //Initializing the Analog Inputs
-            for( int i = 0; i < 6; ++i)
-            { Analog_Inpts[i] = new Test_Paramater(); }
+            for( int i = 0; i < 4; ++i)
+            {
+                Analog_Inpts[i] = new Test_Paramater("Analog_Input_" + i);
+                Relay_Outpts[i] = new Test_Paramater("Relay_Output_" + i);
+            }
 
             Digital_Inputs.Tag = 0;  //initialize the last used index to the first channel so that it isn't null when used the first time.
             Analog_Inputs.Tag = 0;
@@ -235,6 +238,83 @@ namespace DVR_Tester_User_Interface
                 button4.Visible = true;                         //Reenable the load button
                 SaveList.Items.Add(SaveName.Text);              //Add the save name to the list of Loadable Tests
                 label12.Text = "Test Name: " + SaveName.Text;   //Set the test name label to equal the last save name
+                
+                //Create the Save File
+                string SavePath = "C:\\Users\\Seth_2\\Desktop\\";
+                char[] endLine = {'\n'};
+                SavePath += SaveName.Text;
+                SavePath += ".xml";
+                XmlTextWriter XmlFile = new XmlTextWriter(SavePath, null);
+                XmlFile.WriteStartDocument();
+                string XmlSaveName = SaveName.Text;
+                XmlSaveName = XmlSaveName.Replace(' ', '_');
+                XmlFile.WriteStartElement(XmlSaveName);
+
+                    XmlFile.WriteChars(endLine, 0, 1);
+                    XmlFile.WriteComment("MobileView DVR Automated Test Save");
+                    XmlFile.WriteChars(endLine, 0, 1);
+
+                    XmlFile.WriteStartElement("Main_Test_Paramaters");
+                    XmlFile.WriteChars(endLine, 0, 1);
+
+                        XmlFile.WriteStartElement("DVR_Model", "");
+                        XmlFile.WriteString(DVR_Model.GetItemText(DVR_Model.SelectedIndex));
+                        XmlFile.WriteEndElement();
+                        XmlFile.WriteChars(endLine, 0, 1);
+
+                        XmlFile.WriteStartElement("Cycles_To_Run", "");
+                        XmlFile.WriteString(textBox6.Text);
+                        XmlFile.WriteEndElement();
+                        XmlFile.WriteChars(endLine, 0, 1);
+
+                        XmlFile.WriteStartElement("Main_On_To_Ign_On", "");
+                        XmlFile.WriteString(textBox7.Text);
+                        XmlFile.WriteEndElement();
+                        XmlFile.WriteChars(endLine, 0, 1);
+
+                        XmlFile.WriteStartElement("Ign_On_To_Ign_Off", "");
+                        XmlFile.WriteString(textBox8.Text);
+                        XmlFile.WriteEndElement();
+                        XmlFile.WriteChars(endLine, 0, 1);
+
+                        XmlFile.WriteStartElement("Ign_Off_To_Main_Off", "");
+                        XmlFile.WriteString(textBox9.Text);
+                        XmlFile.WriteEndElement();
+                        XmlFile.WriteChars(endLine, 0, 1);
+
+                        XmlFile.WriteStartElement("Main_Off_To_Main_On", "");
+                        XmlFile.WriteString(textBox10.Text);
+                        XmlFile.WriteEndElement();
+                        XmlFile.WriteChars(endLine, 0, 1);
+
+                    XmlFile.WriteEndElement();
+                    XmlFile.WriteChars(endLine, 0, 1);
+                    XmlFile.WriteChars(endLine, 0, 1);
+
+                    for (int i = 0; i < 16; ++i)
+                    {
+                        SaveParamater(Audio_Chnls[i], XmlFile);
+                    }
+                    for (int i = 0; i < 16; ++i)
+                    {
+                        SaveParamater(Video_Chnls[i], XmlFile);
+                    }
+                    for (int i = 0; i < 16; ++i)
+                    {
+                        SaveParamater(Digital_Inpts[i], XmlFile);
+                    }
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        SaveParamater(Relay_Outpts[i], XmlFile);
+                    }
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        SaveParamater(Analog_Inpts[i], XmlFile);
+                    }
+                XmlFile.WriteEndElement();
+                XmlFile.WriteEndDocument();
+                XmlFile.Close();
+
             }
             else                                                //Starting the save process
             {
@@ -339,7 +419,16 @@ namespace DVR_Tester_User_Interface
 
         private void checkBox78_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (checkBox78.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox78.Text = "Audio #10 OFF";
+                checkBox78.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox78.Text = "Audio #10 ON";
+                checkBox78.BackColor = Color.LightGreen;
+            }
         }
 
         private void checkBox71_CheckedChanged(object sender, EventArgs e)
@@ -356,28 +445,41 @@ namespace DVR_Tester_User_Interface
         {
             if (checkBox87.Checked == true)             //Need to also send Serial Data to Tester
             {
-                checkBox87.Text = "Low";
+                checkBox87.Text = "Audio #1 OFF";
+                checkBox87.BackColor = Color.Transparent;
             }
             else
             {
-                checkBox87.Text = "High";
+                checkBox87.Text = "Audio #1 ON";
+                checkBox87.BackColor = Color.LightGreen;
             }
         }
 
         private void checkBox72_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (checkBox72.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox72.Text = "Audio #16 OFF";
+                checkBox72.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox72.Text = "Audio #16 ON";
+                checkBox72.BackColor = Color.LightGreen;
+            }
         }
 
         private void checkBox74_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox74.Checked == true)             //Need to also send Serial Data to Tester
             {
-                checkBox74.Text = "Low";
+                checkBox74.Text = "Audio #14 OFF";
+                checkBox74.BackColor = Color.Transparent;
             }
             else
             {
-                checkBox74.Text = "High";
+                checkBox74.Text = "Audio #14 ON";
+                checkBox74.BackColor = Color.LightGreen;
             }
         }
 
@@ -385,11 +487,13 @@ namespace DVR_Tester_User_Interface
         {
             if (checkBox79.Checked == true)             //Need to also send Serial Data to Tester
             {
-                checkBox79.Text = "Low";
+                checkBox79.Text = "Audio #9 OFF";
+                checkBox79.BackColor = Color.Transparent;
             }
             else
             {
-                checkBox79.Text = "High";
+                checkBox79.Text = "Audio #9 ON";
+                checkBox79.BackColor = Color.LightGreen;
             }
         }
 
@@ -422,18 +526,739 @@ namespace DVR_Tester_User_Interface
 
         }
 
+        private void checkBox86_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox86.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox86.Text = "Audio #2 OFF";
+                checkBox86.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox86.Text = "Audio #2 ON";
+                checkBox86.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox85_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox85.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox85.Text = "Audio #3 OFF";
+                checkBox85.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox85.Text = "Audio #3 ON";
+                checkBox85.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox84_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox84.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox84.Text = "Audio #4 OFF";
+                checkBox84.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox84.Text = "Audio #4 ON";
+                checkBox84.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox83_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox83.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox83.Text = "Audio #5 OFF";
+                checkBox83.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox83.Text = "Audio #5 ON";
+                checkBox83.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox82_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox82.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox82.Text = "Audio #6 OFF";
+                checkBox82.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox82.Text = "Audio #6 ON";
+                checkBox82.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox81_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox81.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox81.Text = "Audio #7 OFF";
+                checkBox81.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox81.Text = "Audio #7 ON";
+                checkBox81.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox80_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox80.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox80.Text = "Audio #8 OFF";
+                checkBox80.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox80.Text = "Audio #8 ON";
+                checkBox80.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox77_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox77.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox77.Text = "Audio #11 OFF";
+                checkBox77.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox77.Text = "Audio #11 ON";
+                checkBox77.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox76_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox76.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox76.Text = "Audio #12 OFF";
+                checkBox76.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox76.Text = "Audio #12 ON";
+                checkBox76.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox75_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox75.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox75.Text = "Audio #13 OFF";
+                checkBox75.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox75.Text = "Audio #13 ON";
+                checkBox75.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox73_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox73.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox73.Text = "Audio #15 OFF";
+                checkBox73.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox73.Text = "Audio #15 ON";
+                checkBox73.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox67_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox67.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox67.Text = "Video #1 OFF";
+                checkBox67.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox67.Text = "Video #1 ON";
+                checkBox67.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox66_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox66.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox66.Text = "Video #2 OFF";
+                checkBox66.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox66.Text = "Video #2 ON";
+                checkBox66.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox61_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox61.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox61.Text = "Video #3 OFF";
+                checkBox61.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox61.Text = "Video #3 ON";
+                checkBox61.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox60_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (checkBox60.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox60.Text = "Video #4 OFF";
+                checkBox60.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox60.Text = "Video #4 ON";
+                checkBox60.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox59_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox59.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox59.Text = "Video #5 OFF";
+                checkBox59.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox59.Text = "Video #5 ON";
+                checkBox59.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox58_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox58.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox58.Text = "Video #6 OFF";
+                checkBox58.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox58.Text = "Video #6 ON";
+                checkBox58.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox57_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox57.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox57.Text = "Video #7 OFF";
+                checkBox57.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox57.Text = "Video #7 ON";
+                checkBox57.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox56_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox56.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox56.Text = "Video #8 OFF";
+                checkBox56.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox56.Text = "Video #8 ON";
+                checkBox56.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox55_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox55.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox55.Text = "Video #9 OFF";
+                checkBox55.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox55.Text = "Video #9 ON";
+                checkBox55.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox54_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (checkBox54.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox54.Text = "Video #10 OFF";
+                checkBox54.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox54.Text = "Video #10 ON";
+                checkBox54.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox53_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox53.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox53.Text = "Video #11 OFF";
+                checkBox53.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox53.Text = "Video #11 ON";
+                checkBox53.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox52_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox52.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox52.Text = "Video #12 OFF";
+                checkBox52.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox52.Text = "Video #12 ON";
+                checkBox52.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox51_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox51.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox51.Text = "Video #13 OFF";
+                checkBox51.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox51.Text = "Video #13 ON";
+                checkBox51.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox50_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox50.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox50.Text = "Video #14 OFF";
+                checkBox50.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox50.Text = "Video #14 ON";
+                checkBox50.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox17_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox17.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox17.Text = "Video #15 OFF";
+                checkBox17.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox17.Text = "Video #15 ON";
+                checkBox17.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox16_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox16.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox16.Text = "Video #16 OFF";
+                checkBox16.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox16.Text = "Video #16 ON";
+                checkBox16.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox103_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox103.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox103.Text = "Digital #1 OFF";
+                checkBox103.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox103.Text = "Digital #1 ON";
+                checkBox103.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox102_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox102.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox102.Text = "Digital #2 OFF";
+                checkBox102.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox102.Text = "Digital #2 ON";
+                checkBox102.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox101_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox101.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox101.Text = "Digital #3 OFF";
+                checkBox101.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox101.Text = "Digital #3 ON";
+                checkBox101.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox100_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox100.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox100.Text = "Digital #4 OFF";
+                checkBox100.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox100.Text = "Digital #4 ON";
+                checkBox100.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox99_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox99.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox99.Text = "Digital #5 OFF";
+                checkBox99.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox99.Text = "Digital #5 ON";
+                checkBox99.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox98_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox98.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox98.Text = "Digital #6 OFF";
+                checkBox98.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox98.Text = "Digital #6 ON";
+                checkBox98.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox95_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox95.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox95.Text = "Digital #7 OFF";
+                checkBox95.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox95.Text = "Digital #7 ON";
+                checkBox95.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox92_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox92.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox92.Text = "Digital #8 OFF";
+                checkBox92.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox92.Text = "Digital #8 ON";
+                checkBox92.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox91_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox91.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox91.Text = "Digital #9 OFF";
+                checkBox91.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox91.Text = "Digital #9 ON";
+                checkBox91.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox90_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox90.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox90.Text = "Digital #10 OFF";
+                checkBox90.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox90.Text = "Digital #10 ON";
+                checkBox90.BackColor = Color.LightGreen;
+            }
+
+        }
+
+        private void checkBox89_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox89.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox89.Text = "Digital #11 OFF";
+                checkBox89.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox89.Text = "Digital #11 ON";
+                checkBox89.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox88_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox88.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox88.Text = "Digital #12 OFF";
+                checkBox88.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox88.Text = "Digital #12 ON";
+                checkBox88.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox71_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (checkBox71.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox71.Text = "Digital #13 OFF";
+                checkBox71.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox71.Text = "Digital #13 ON";
+                checkBox71.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox70_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox70.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox70.Text = "Digital #14 OFF";
+                checkBox70.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox70.Text = "Digital #14 ON";
+                checkBox70.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox69_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox69.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox69.Text = "Digital #15 OFF";
+                checkBox69.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox69.Text = "Digital #15 ON";
+                checkBox69.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void checkBox68_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (checkBox68.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox68.Text = "Digital #16 OFF";
+                checkBox68.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox68.Text = "Digital #16 ON";
+                checkBox68.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void textBox21_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt16(textBox21.Text) > 30)
+                    textBox21.Text = "30";
+                if (Convert.ToInt16(textBox21.Text) < 0)
+                    textBox21.Text = "0";
+            }
+            catch
+            {
+                if (textBox21.Text.Length > 0)
+                    textBox21.Text = textBox21.Text.Remove(textBox21.Text.Length - 1);
+            }
+        }
+
+        private void textBox22_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt16(textBox22.Text) > 30)
+                    textBox22.Text = "30";
+                if (Convert.ToInt16(textBox22.Text) < 0)
+                    textBox22.Text = "0";
+            }
+            catch
+            {
+                if (textBox22.Text.Length > 0)
+                    textBox22.Text = textBox22.Text.Remove(textBox22.Text.Length - 1);
+            }
+        }
+
+        private void textBox23_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt16(textBox23.Text) > 30)
+                    textBox23.Text = "30";
+                if (Convert.ToInt16(textBox23.Text) < 0)
+                    textBox23.Text = "0";
+            }
+            catch
+            {
+                if (textBox23.Text.Length > 0)
+                    textBox23.Text = textBox23.Text.Remove(textBox23.Text.Length - 1);
+            }
+        }
+
+        private void textBox24_TextChanged(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (Convert.ToInt16(textBox24.Text) > 30)
+                    textBox24.Text = "30";
+                if (Convert.ToInt16(textBox24.Text) < 0)
+                    textBox24.Text = "0";
+            }
+            catch
+            {
+                if (textBox24.Text.Length > 0)
+                    textBox24.Text = textBox24.Text.Remove(textBox24.Text.Length - 1);
+            }
+        }
+
+        private void SaveParamater(Test_Paramater Param, XmlTextWriter XmlFile)
+        {
+            char[] endLine = { '\n' };
+
+            XmlFile.WriteStartElement("Test_Paramater");
+            XmlFile.WriteChars(endLine, 0, 1);
+
+            XmlFile.WriteStartElement("Name", "");
+            XmlFile.WriteString(Param.name);
+            XmlFile.WriteEndElement();
+            XmlFile.WriteChars(endLine, 0, 1);
+
+            XmlFile.WriteStartElement("Enabled", "");
+            XmlFile.WriteString(Param.enabled.ToString());
+            XmlFile.WriteEndElement();
+            XmlFile.WriteChars(endLine, 0, 1);
+
+            XmlFile.WriteStartElement("Delay", "");
+            XmlFile.WriteString(Param.delay.ToString());
+            XmlFile.WriteEndElement();
+            XmlFile.WriteChars(endLine, 0, 1);
+
+            XmlFile.WriteStartElement("TimeOn", "");
+            XmlFile.WriteString(Param.timeOn.ToString());
+            XmlFile.WriteEndElement();
+            XmlFile.WriteChars(endLine, 0, 1);
+
+            XmlFile.WriteStartElement("TimeOff", "");
+            XmlFile.WriteString(Param.timeOff.ToString());
+            XmlFile.WriteEndElement();
+            XmlFile.WriteChars(endLine, 0, 1);
+
+            XmlFile.WriteEndElement();
+            XmlFile.WriteChars(endLine, 0, 1);
+            XmlFile.WriteChars(endLine, 0, 1);
+        }
+
+        private void checkBox104_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox104.Checked == true)             //Need to also send Serial Data to Tester
+            {
+                checkBox104.Text = "Network OFF";
+                checkBox104.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox104.Text = "Network ON";
+                checkBox104.BackColor = Color.LightGreen;
+            }
+
+        }
     }
     //This class is what holds the definitions for each test input paramater.
     public class Test_Paramater
     {
-        public Test_Paramater()    //Constructor
+        public Test_Paramater(string nname)    //Constructor
         {
             enabled = true;
             delay = 0;
             timeOn = 0;
             timeOff = 0;
+            name = nname;
         }
 
+        public string name;
         public bool enabled;   //Defines if the test paramater is useable with the DVR Model selected
         public long delay;      //Defines how long before the paramater is toggled
         public long timeOn;     //Defines how long the paramater is on before turning off again.
