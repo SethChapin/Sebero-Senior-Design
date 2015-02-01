@@ -1264,7 +1264,7 @@
             "Com #3",
             "Com #4",
             "Com #5"});
-            this.comboBox3.Location = new System.Drawing.Point(87, 70);
+            this.comboBox3.Location = new System.Drawing.Point(87, 72);
             this.comboBox3.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(103, 24);
@@ -1275,7 +1275,7 @@
             // label185
             // 
             this.label185.AutoSize = true;
-            this.label185.Location = new System.Drawing.Point(4, 74);
+            this.label185.Location = new System.Drawing.Point(4, 76);
             this.label185.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label185.Name = "label185";
             this.label185.Size = new System.Drawing.Size(66, 17);
@@ -1284,7 +1284,7 @@
             // 
             // button14
             // 
-            this.button14.Location = new System.Drawing.Point(119, 101);
+            this.button14.Location = new System.Drawing.Point(119, 103);
             this.button14.Margin = new System.Windows.Forms.Padding(4);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(108, 28);
@@ -1294,7 +1294,7 @@
             // 
             // button15
             // 
-            this.button15.Location = new System.Drawing.Point(3, 101);
+            this.button15.Location = new System.Drawing.Point(3, 103);
             this.button15.Margin = new System.Windows.Forms.Padding(4);
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(108, 28);
@@ -1325,7 +1325,7 @@
             this.checkBox96.Checked = true;
             this.checkBox96.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox96.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBox96.Location = new System.Drawing.Point(4, 44);
+            this.checkBox96.Location = new System.Drawing.Point(4, 46);
             this.checkBox96.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox96.Name = "checkBox96";
             this.checkBox96.Size = new System.Drawing.Size(164, 23);
@@ -1341,7 +1341,7 @@
             this.checkBox97.Checked = true;
             this.checkBox97.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox97.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBox97.Location = new System.Drawing.Point(4, 23);
+            this.checkBox97.Location = new System.Drawing.Point(4, 25);
             this.checkBox97.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox97.Name = "checkBox97";
             this.checkBox97.Size = new System.Drawing.Size(164, 23);
