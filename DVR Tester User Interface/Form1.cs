@@ -5469,6 +5469,11 @@ namespace DVR_Tester_User_Interface
             }
             catch { }
         }
+
+        private void checkBox111_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
     //This class is what holds the definitions for each test input paramater.
     public class Test_Paramater
