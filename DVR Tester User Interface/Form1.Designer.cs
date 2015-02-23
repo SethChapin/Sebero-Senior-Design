@@ -2082,6 +2082,7 @@
             this.checkBox45.TabIndex = 290;
             this.checkBox45.Text = "Video #1 ON";
             this.checkBox45.UseVisualStyleBackColor = false;
+            this.checkBox45.CheckedChanged += new System.EventHandler(this.checkBox45_CheckedChanged);
             // 
             // label35
             // 

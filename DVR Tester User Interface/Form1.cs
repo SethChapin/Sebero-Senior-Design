@@ -14,16 +14,16 @@ namespace DVR_Tester_User_Interface
 
     public partial class Form1 : Form
     {
-            public SerialPort SerialObject;
-            public bool connected = false;
-            public CheckBox[] AudioLines = new CheckBox[16];
-            public CheckBox[] VideoLines = new CheckBox[16];
-            public CheckBox[] DigitalLines = new CheckBox[16];
+            public SerialPort SerialObject;                          //Serial Port connection to Test Unit
+            public bool connected = false;                           //Keeps track of connection to Test Unit
+            public CheckBox[] AudioLines = new CheckBox[16];         //Visual Representation of each Audio Channel
+            public CheckBox[] VideoLines = new CheckBox[16];         //Visual Representation of each Video Channel
+            public CheckBox[] DigitalLines = new CheckBox[16];       //Visual Representation of each Digital Channel
             Test_Paramater[] Audio_Chnls = new Test_Paramater[16];   //Defines the paramaters for each audio channel
             Test_Paramater[] Video_Chnls = new Test_Paramater[16];   //Defines the paramaters for each Video channel
             Test_Paramater[] Analog_Inpts = new Test_Paramater[4];   //Defines the paramaters for each Analog channel
             Test_Paramater[] Digital_Inpts = new Test_Paramater[16]; //Defines the paramaters for each Digital channel
-            Test_Paramater[] Relay_Outpts = new Test_Paramater[4];  //Defines the paramaters for each Relay Output
+            Test_Paramater[] Relay_Outpts = new Test_Paramater[4];   //Defines the paramaters for each Relay Output
         public Form1()
         {
 
@@ -472,8 +472,8 @@ namespace DVR_Tester_User_Interface
 
         private void checkBox78_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox78.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox78.Checked == true)             //Sends line update command to test unit
             {
                 checkBox78.Text = "Audio #10 OFF";
                 checkBox78.BackColor = Color.Transparent;
@@ -483,27 +483,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					    if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -516,31 +496,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
@@ -557,8 +513,8 @@ namespace DVR_Tester_User_Interface
 
         private void checkBox87_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox87.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox87.Checked == true)             //Sends line update command to test unit
             {
                 checkBox87.Text = "Audio #1 OFF";
                 checkBox87.BackColor = Color.Transparent;
@@ -568,31 +524,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
 
             }
@@ -606,39 +538,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox72_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox72.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox72.Checked == true)             //Sends line update command to test unit
             {
                 checkBox72.Text = "Audio #16 OFF";
                 checkBox72.BackColor = Color.Transparent;
@@ -649,31 +557,7 @@ namespace DVR_Tester_User_Interface
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
 
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -686,39 +570,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox74_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox74.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox74.Checked == true)             //Sends line update command to test unit
             {
                 checkBox74.Text = "Audio #14 OFF";
                 checkBox74.BackColor = Color.Transparent;
@@ -728,31 +588,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -765,39 +601,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox79_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox79.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox79.Checked == true)             //Sends line update command to test unit
             {
                 checkBox79.Text = "Audio #9 OFF";
                 checkBox79.BackColor = Color.Transparent;
@@ -807,31 +619,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -844,59 +632,10 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
-
-        private void checkBox60_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox60.Checked == true)             //Need to also send Serial Data to Tester
-            {
-                checkBox60.Text = "Low";
-            }
-            else
-            {
-                checkBox60.Text = "High";
-            }
-        }
-
-        private void checkBox54_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox54.Checked == true)             //Need to also send Serial Data to Tester
-            {
-                checkBox54.Text = "Low";
-            }
-            else
-            {
-                checkBox54.Text = "High";
-            }
-        }
-
         private void label28_Click(object sender, EventArgs e)
         {
 
@@ -904,8 +643,8 @@ namespace DVR_Tester_User_Interface
 
         private void checkBox86_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox86.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox86.Checked == true)             //Sends line update command to test unit
             {
                 checkBox86.Text = "Audio #2 OFF";
                 checkBox86.BackColor = Color.Transparent;
@@ -915,31 +654,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -952,39 +667,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox85_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox85.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox85.Checked == true)             //Sends line update command to test unit
             {
                 checkBox85.Text = "Audio #3 OFF";
                 checkBox85.BackColor = Color.Transparent;
@@ -994,31 +685,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1031,39 +698,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox84_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox84.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox84.Checked == true)             //Sends line update command to test unit
             {
                 checkBox84.Text = "Audio #4 OFF";
                 checkBox84.BackColor = Color.Transparent;
@@ -1073,31 +716,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1110,39 +729,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox83_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox83.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox83.Checked == true)             //Sends line update command to test unit
             {
                 checkBox83.Text = "Audio #5 OFF";
                 checkBox83.BackColor = Color.Transparent;
@@ -1152,31 +747,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1189,39 +760,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox82_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox82.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox82.Checked == true)             //Sends line update command to test unit
             {
                 checkBox82.Text = "Audio #6 OFF";
                 checkBox82.BackColor = Color.Transparent;
@@ -1231,31 +778,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1268,39 +791,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox81_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox81.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox81.Checked == true)             //Sends line update command to test unit
             {
                 checkBox81.Text = "Audio #7 OFF";
                 checkBox81.BackColor = Color.Transparent;
@@ -1310,31 +809,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1347,39 +822,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox80_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox80.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox80.Checked == true)             //Sends line update command to test unit
             {
                 checkBox80.Text = "Audio #8 OFF";
                 checkBox80.BackColor = Color.Transparent;
@@ -1389,31 +840,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1426,39 +853,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox77_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox77.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox77.Checked == true)             //Sends line update command to test unit
             {
                 checkBox77.Text = "Audio #11 OFF";
                 checkBox77.BackColor = Color.Transparent;
@@ -1468,31 +871,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1505,39 +884,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox76_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox76.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox76.Checked == true)             //Sends line update command to test unit
             {
                 checkBox76.Text = "Audio #12 OFF";
                 checkBox76.BackColor = Color.Transparent;
@@ -1547,31 +902,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1584,39 +915,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox75_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox75.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox75.Checked == true)             //Sends line update command to test unit
             {
                 checkBox75.Text = "Audio #13 OFF";
                 checkBox75.BackColor = Color.Transparent;
@@ -1626,31 +933,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1663,39 +946,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox73_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox73.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox73.Checked == true)             //Sends line update command to test unit
             {
                 checkBox73.Text = "Audio #15 OFF";
                 checkBox73.BackColor = Color.Transparent;
@@ -1705,31 +964,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1742,39 +977,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox67_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox67.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox67.Checked == true)             //Sends line update command to test unit
             {
                 checkBox67.Text = "Video #1 OFF";
                 checkBox67.BackColor = Color.Transparent;
@@ -1784,31 +995,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1821,39 +1008,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox66_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox66.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox66.Checked == true)             //Sends line update command to test unit
             {
                 checkBox66.Text = "Video #2 OFF";
                 checkBox66.BackColor = Color.Transparent;
@@ -1863,31 +1026,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1900,39 +1039,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox61_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox61.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox61.Checked == true)             //Sends line update command to test unit
             {
                 checkBox61.Text = "Video #3 OFF";
                 checkBox61.BackColor = Color.Transparent;
@@ -1942,31 +1057,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -1979,39 +1070,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox60_CheckedChanged_1(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox60.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox60.Checked == true)             //Sends line update command to test unit
             {
                 checkBox60.Text = "Video #4 OFF";
                 checkBox60.BackColor = Color.Transparent;
@@ -2021,31 +1088,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2058,39 +1101,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox59_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox59.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox59.Checked == true)             //Sends line update command to test unit
             {
                 checkBox59.Text = "Video #5 OFF";
                 checkBox59.BackColor = Color.Transparent;
@@ -2100,31 +1119,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2137,39 +1132,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox58_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox58.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox58.Checked == true)             //Sends line update command to test unit
             {
                 checkBox58.Text = "Video #6 OFF";
                 checkBox58.BackColor = Color.Transparent;
@@ -2179,31 +1150,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2216,39 +1163,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox57_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox57.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox57.Checked == true)             //Sends line update command to test unit
             {
                 checkBox57.Text = "Video #7 OFF";
                 checkBox57.BackColor = Color.Transparent;
@@ -2258,31 +1181,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2295,39 +1194,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox56_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox56.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox56.Checked == true)             //Sends line update command to test unit
             {
                 checkBox56.Text = "Video #8 OFF";
                 checkBox56.BackColor = Color.Transparent;
@@ -2337,31 +1212,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2374,39 +1225,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox55_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox55.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox55.Checked == true)             //Sends line update command to test unit
             {
                 checkBox55.Text = "Video #9 OFF";
                 checkBox55.BackColor = Color.Transparent;
@@ -2416,31 +1243,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2453,39 +1256,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox54_CheckedChanged_1(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox54.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox54.Checked == true)             //Sends line update command to test unit
             {
                 checkBox54.Text = "Video #10 OFF";
                 checkBox54.BackColor = Color.Transparent;
@@ -2495,31 +1274,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2532,39 +1287,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox53_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox53.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox53.Checked == true)             //Sends line update command to test unit
             {
                 checkBox53.Text = "Video #11 OFF";
                 checkBox53.BackColor = Color.Transparent;
@@ -2574,31 +1305,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2611,39 +1318,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox52_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox52.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox52.Checked == true)             //Sends line update command to test unit
             {
                 checkBox52.Text = "Video #12 OFF";
                 checkBox52.BackColor = Color.Transparent;
@@ -2653,31 +1336,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2690,39 +1349,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox51_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox51.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox51.Checked == true)             //Sends line update command to test unit
             {
                 checkBox51.Text = "Video #13 OFF";
                 checkBox51.BackColor = Color.Transparent;
@@ -2732,31 +1367,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2769,39 +1380,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox50_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox50.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox50.Checked == true)             //Sends line update command to test unit
             {
                 checkBox50.Text = "Video #14 OFF";
                 checkBox50.BackColor = Color.Transparent;
@@ -2811,31 +1398,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2848,39 +1411,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox17_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox17.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox17.Checked == true)             //Sends line update command to test unit
             {
                 checkBox17.Text = "Video #15 OFF";
                 checkBox17.BackColor = Color.Transparent;
@@ -2890,31 +1429,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -2927,39 +1442,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox16_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox16.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox16.Checked == true)             //Sends line update command to test unit
             {
                 checkBox16.Text = "Video #16 OFF";
                 checkBox16.BackColor = Color.Transparent;
@@ -2969,31 +1460,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5 ; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3006,39 +1473,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-					if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-					j++;
-					SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox103_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox103.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox103.Checked == true)             //Sends line update command to test unit
             {
                 checkBox103.Text = "Digital #1 OFF";
                 checkBox103.BackColor = Color.Transparent;
@@ -3048,31 +1491,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3085,39 +1504,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox102_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox102.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox102.Checked == true)             //Sends line update command to test unit
             {
                 checkBox102.Text = "Digital #2 OFF";
                 checkBox102.BackColor = Color.Transparent;
@@ -3127,31 +1522,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3164,39 +1535,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox101_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox101.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox101.Checked == true)             //Sends line update command to test unit
             {
                 checkBox101.Text = "Digital #3 OFF";
                 checkBox101.BackColor = Color.Transparent;
@@ -3206,31 +1553,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3243,39 +1566,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox100_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox100.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox100.Checked == true)             //Sends line update command to test unit
             {
                 checkBox100.Text = "Digital #4 OFF";
                 checkBox100.BackColor = Color.Transparent;
@@ -3285,31 +1584,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3322,39 +1597,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox99_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox99.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox99.Checked == true)             //Sends line update command to test unit
             {
                 checkBox99.Text = "Digital #5 OFF";
                 checkBox99.BackColor = Color.Transparent;
@@ -3364,31 +1615,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3401,39 +1628,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox98_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox98.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox98.Checked == true)             //Sends line update command to test unit
             {
                 checkBox98.Text = "Digital #6 OFF";
                 checkBox98.BackColor = Color.Transparent;
@@ -3443,31 +1646,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3480,39 +1659,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox95_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox95.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox95.Checked == true)             //Sends line update command to test unit
             {
                 checkBox95.Text = "Digital #7 OFF";
                 checkBox95.BackColor = Color.Transparent;
@@ -3522,31 +1677,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3559,39 +1690,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox92_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox92.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox92.Checked == true)             //Sends line update command to test unit
             {
                 checkBox92.Text = "Digital #8 OFF";
                 checkBox92.BackColor = Color.Transparent;
@@ -3601,31 +1708,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3638,39 +1721,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox91_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox91.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox91.Checked == true)             //Sends line update command to test unit
             {
                 checkBox91.Text = "Digital #9 OFF";
                 checkBox91.BackColor = Color.Transparent;
@@ -3680,31 +1739,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3717,39 +1752,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox90_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox90.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox90.Checked == true)             //Sends line update command to test unit
             {
                 checkBox90.Text = "Digital #10 OFF";
                 checkBox90.BackColor = Color.Transparent;
@@ -3759,31 +1770,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3796,31 +1783,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
 
@@ -3828,8 +1791,8 @@ namespace DVR_Tester_User_Interface
 
         private void checkBox89_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox89.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox89.Checked == true)             //Sends line update command to test unit
             {
                 checkBox89.Text = "Digital #11 OFF";
                 checkBox89.BackColor = Color.Transparent;
@@ -3839,31 +1802,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3876,39 +1815,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox88_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox88.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox88.Checked == true)             //Sends line update command to test unit
             {
                 checkBox88.Text = "Digital #12 OFF";
                 checkBox88.BackColor = Color.Transparent;
@@ -3918,31 +1833,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -3955,39 +1846,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox71_CheckedChanged_1(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox71.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox71.Checked == true)             //Sends line update command to test unit
             {
                 checkBox71.Text = "Digital #13 OFF";
                 checkBox71.BackColor = Color.Transparent;
@@ -3997,31 +1864,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -4034,39 +1877,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox70_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox70.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox70.Checked == true)             //Sends line update command to test unit
             {
                 checkBox70.Text = "Digital #14 OFF";
                 checkBox70.BackColor = Color.Transparent;
@@ -4076,31 +1895,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -4113,39 +1908,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox69_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox69.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox69.Checked == true)             //Sends line update command to test unit
             {
                 checkBox69.Text = "Digital #15 OFF";
                 checkBox69.BackColor = Color.Transparent;
@@ -4155,31 +1926,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -4192,39 +1939,15 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
 
         private void checkBox68_CheckedChanged_1(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox68.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox68.Checked == true)             //Sends line update command to test unit
             {
                 checkBox68.Text = "Digital #16 OFF";
                 checkBox68.BackColor = Color.Transparent;
@@ -4234,31 +1957,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
             else
@@ -4271,31 +1970,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 5; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 6);
                 }
             }
         }
@@ -4404,41 +2079,17 @@ namespace DVR_Tester_User_Interface
 
         private void checkBox104_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox104.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox104.Checked == true)             //Sends line update command to test unit
             {
                 checkBox104.Text = "Network OFF";
                 checkBox104.BackColor = Color.Transparent; if (connected)
                 {
-                    serialBytes = new byte[5] {0x18, 0x01, 0, 0, 0xFF };
+                    serialBytes = new byte[5] { 0x18, 0x01, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 5);
                 }
             }
             else
@@ -4450,31 +2101,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 5);
                 }
             }
 
@@ -4482,8 +2109,8 @@ namespace DVR_Tester_User_Interface
 
         private void checkBox112_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox112.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox112.Checked == true)             //Sends line update command to test unit
             {
                 checkBox112.Text = "Main Power OFF";
                 checkBox112.BackColor = Color.Transparent; if (connected)
@@ -4492,31 +2119,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 5);
                 }
             }
             else
@@ -4528,31 +2131,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 5);
                 }
             }
 
@@ -4560,8 +2139,8 @@ namespace DVR_Tester_User_Interface
 
         private void checkBox113_CheckedChanged(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (checkBox113.Checked == true)             //Need to also send Serial Data to Tester
+            byte[] serialBytes;
+            if (checkBox113.Checked == true)             //Sends line update command to test unit
             {
                 checkBox113.Text = "Ignition OFF";
                 checkBox113.BackColor = Color.Transparent; if (connected)
@@ -4570,31 +2149,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 5);
                 }
             }
             else
@@ -4606,31 +2161,7 @@ namespace DVR_Tester_User_Interface
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
-                    int j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 5);
                 }
             }
         }
@@ -4659,61 +2190,23 @@ namespace DVR_Tester_User_Interface
         {
             comboBox3.Items.Clear();
             Com_Port.Items.Clear();
-            string[] ports = SerialPort.GetPortNames();
+            string[] ports = SerialPort.GetPortNames();//Finds all avalable com ports.
             foreach (string port in ports)
             {
                 comboBox3.Items.Add(port);
-                Com_Port.Items.Add(port);
+                Com_Port.Items.Add(port);//Adds avaliable com ports to drop down list
             }
         }
         private void Com_Port_DropDown(object sender, EventArgs e)
         {
             comboBox3.Items.Clear();
             Com_Port.Items.Clear();
-            string[] ports = SerialPort.GetPortNames();
+            string[] ports = SerialPort.GetPortNames();     //Finds all avalable com ports.
             foreach (string port in ports)
             {
                 comboBox3.Items.Add(port);
-                Com_Port.Items.Add(port);
+                Com_Port.Items.Add(port);       //Adds avaliable com ports to drop down list
             }
-        }
-        public int readSerialData(SerialPort port, byte[] dataRecieved)
-        {
-            try
-            {
-                for (int i = 0; i < 260; ++i)
-                {
-                    dataRecieved[i] = Convert.ToByte(port.ReadByte());
-                    if (dataRecieved[i] == 0xff)
-                        return i + 1;
-                    if (i > 0 && dataRecieved[i - 1] == 0xCD)
-                    {
-                        if (dataRecieved[i] == 0x55)
-                        {
-                            dataRecieved[i - 1] = 0xFF;
-                            i--;
-                        }
-                        if (dataRecieved[i] == 0xAA)
-                        {
-                            dataRecieved[i - 1] = 0xCD;
-                            i--;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                return -1;
-            }
-            return -1;
-        }
-        public void sendSerialData(SerialPort port, byte[] dataToSend, int length)
-        {
-            try
-            {
-                    port.Write(dataToSend, 0, length);
-            }
-            catch{}
         }
         private void button14_Click(object sender, EventArgs e)
         {
@@ -4722,13 +2215,13 @@ namespace DVR_Tester_User_Interface
                 checkBox94.Checked = false;
                 checkBox9.Checked = false;
                 connected = false;
-                SerialObject.Close();
+                SerialObject.Close();       //Disconnect from Com Port
             }
         }
 
         private void button10_Click(object sender, EventArgs e)
-        {
-            byte[] serialBytes, sentSerialBytes;
+        {       //Set Analog #1
+            byte[] serialBytes;
             if (connected)
             {
                 byte volLvl = 0;
@@ -4737,38 +2230,14 @@ namespace DVR_Tester_User_Interface
                 int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                 serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                 serialBytes[4] = (byte)(checksum & 0xFF);
-                int j = 0;
-                sentSerialBytes = new byte[12];
-                for (int i = 0; i < 5; ++i)
-                {
-                    sentSerialBytes[j] = serialBytes[i];
-                    if (sentSerialBytes[j] == 0xFF)
-                    {
-                        sentSerialBytes[j] = 0xCD;
-                        j++;
-                        sentSerialBytes[j] = 0x55;
-                    }
-                    else if (sentSerialBytes[j] == 0xCD)
-                    {
-                        j++;
-                        sentSerialBytes[j] = 0xAA;
-                    }
-                    else
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                    }
-                    j++;
-                }
-                sentSerialBytes[j] = 0xFF;
-                j++;
-                SerialObject.Write(sentSerialBytes, 0, j);
+                SendMessage(SerialObject, serialBytes, 6);
             }
         }
 
         private void button11_Click(object sender, EventArgs e)
-        {
+        {       //Set Analog #2
 
-            byte[] serialBytes, sentSerialBytes;
+            byte[] serialBytes;
             if (connected)
             {
                 byte volLvl = 0;
@@ -4777,38 +2246,14 @@ namespace DVR_Tester_User_Interface
                 int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                 serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                 serialBytes[4] = (byte)(checksum & 0xFF);
-                int j = 0;
-                sentSerialBytes = new byte[12];
-                for (int i = 0; i < 5; ++i)
-                {
-                    sentSerialBytes[j] = serialBytes[i];
-                    if (sentSerialBytes[j] == 0xFF)
-                    {
-                        sentSerialBytes[j] = 0xCD;
-                        j++;
-                        sentSerialBytes[j] = 0x55;
-                    }
-                    else if (sentSerialBytes[j] == 0xCD)
-                    {
-                        j++;
-                        sentSerialBytes[j] = 0xAA;
-                    }
-                    else
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                    }
-                    j++;
-                }
-                sentSerialBytes[j] = 0xFF;
-                j++;
-                SerialObject.Write(sentSerialBytes, 0, j);
+                SendMessage(SerialObject, serialBytes, 6);
             }
         }
 
         private void button12_Click(object sender, EventArgs e)
-        {
+        {       //Set Analog #3
 
-            byte[] serialBytes, sentSerialBytes;
+            byte[] serialBytes;
             if (connected)
             {
                 byte volLvl = 0;
@@ -4817,38 +2262,14 @@ namespace DVR_Tester_User_Interface
                 int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                 serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                 serialBytes[4] = (byte)(checksum & 0xFF);
-                int j = 0;
-                sentSerialBytes = new byte[12];
-                for (int i = 0; i < 5; ++i)
-                {
-                    sentSerialBytes[j] = serialBytes[i];
-                    if (sentSerialBytes[j] == 0xFF)
-                    {
-                        sentSerialBytes[j] = 0xCD;
-                        j++;
-                        sentSerialBytes[j] = 0x55;
-                    }
-                    else if (sentSerialBytes[j] == 0xCD)
-                    {
-                        j++;
-                        sentSerialBytes[j] = 0xAA;
-                    }
-                    else
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                    }
-                    j++;
-                }
-                sentSerialBytes[j] = 0xFF;
-                j++;
-                SerialObject.Write(sentSerialBytes, 0, j);
+                SendMessage(SerialObject, serialBytes, 6);
             }
         }
 
         private void button13_Click(object sender, EventArgs e)
-        {
+        {           //Set Analog #4
 
-            byte[] serialBytes, sentSerialBytes;
+            byte[] serialBytes;
             if (connected)
             {
                 byte volLvl = 0;
@@ -4857,291 +2278,75 @@ namespace DVR_Tester_User_Interface
                 int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                 serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                 serialBytes[4] = (byte)(checksum & 0xFF);
-                int j = 0;
-                sentSerialBytes = new byte[12];
-                for (int i = 0; i < 5; ++i)
-                {
-                    sentSerialBytes[j] = serialBytes[i];
-                    if (sentSerialBytes[j] == 0xFF)
-                    {
-                        sentSerialBytes[j] = 0xCD;
-                        j++;
-                        sentSerialBytes[j] = 0x55;
-                    }
-                    else if (sentSerialBytes[j] == 0xCD)
-                    {
-                        j++;
-                        sentSerialBytes[j] = 0xAA;
-                    }
-                    else
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                    }
-                    j++;
-                }
-                sentSerialBytes[j] = 0xFF;
-                j++;
-                SerialObject.Write(sentSerialBytes, 0, j);
+                SendMessage(SerialObject, serialBytes, 6);
             }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            byte[] serialBytes, sentSerialBytes;
-            if (connected)
+            byte[] serialBytes;
+            if (connected)      //Ask for Line Updates
             {
-                serialBytes = new byte[4] { 0x13, 0, 0, 0xFF };
+                serialBytes = new byte[4] { 0x13, 0, 0, 0xFF };     //Relay Lines
                 int checksum = serialBytes[0];
                 serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
                 serialBytes[2] = (byte)(checksum & 0xFF);
-                int j = 0;
-                sentSerialBytes = new byte[12];
-                for (int i = 0; i < 3; ++i)
-                {
-                    sentSerialBytes[j] = serialBytes[i];
-                    if (sentSerialBytes[j] == 0xFF)
-                    {
-                        sentSerialBytes[j] = 0xCD;
-                        j++;
-                        sentSerialBytes[j] = 0x55;
-                    }
-                    else if (sentSerialBytes[j] == 0xCD)
-                    {
-                        j++;
-                        sentSerialBytes[j] = 0xAA;
-                    }
-                    else
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                    }
-                    j++;
-                }
-                sentSerialBytes[j] = 0xFF;
-                j++;
-                SerialObject.Write(sentSerialBytes, 0, j);
+                SendMessage(SerialObject, serialBytes, 4);
                 Recieve_Msg();
 
-                serialBytes = new byte[4] { 0x1C, 0, 0, 0xFF };
+                serialBytes = new byte[4] { 0x1C, 0, 0, 0xFF };    //LED Lines
                 checksum = serialBytes[0];
                 serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
                 serialBytes[2] = (byte)(checksum & 0xFF);
-                j = 0;
-                sentSerialBytes = new byte[12];
-                for (int i = 0; i < 3; ++i)
-                {
-                    sentSerialBytes[j] = serialBytes[i];
-                    if (sentSerialBytes[j] == 0xFF)
-                    {
-                        sentSerialBytes[j] = 0xCD;
-                        j++;
-                        sentSerialBytes[j] = 0x55;
-                    }
-                    else if (sentSerialBytes[j] == 0xCD)
-                    {
-                        j++;
-                        sentSerialBytes[j] = 0xAA;
-                    }
-                    else
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                    }
-                    j++;
-                }
-                sentSerialBytes[j] = 0xFF;
-                j++;
-                SerialObject.Write(sentSerialBytes, 0, j);
+                SendMessage(SerialObject, serialBytes, 4);
                 Recieve_Msg();
 
                 if (UI.SelectedIndex == 0)
                 {
-                    serialBytes = new byte[4] { 0x17, 0, 0, 0xFF };
+                    serialBytes = new byte[4] { 0x17, 0, 0, 0xFF }; //Audio Lines
                     checksum = serialBytes[0];
                     serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[2] = (byte)(checksum & 0xFF);
-                    j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 4);
                     Recieve_Msg();
 
 
-                    serialBytes = new byte[4] { 0x15, 0, 0, 0xFF };
+                    serialBytes = new byte[4] { 0x15, 0, 0, 0xFF }; //Video Lines
                     checksum = serialBytes[0];
                     serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[2] = (byte)(checksum & 0xFF);
-                    j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 4);
                     Recieve_Msg();
 
 
-                    serialBytes = new byte[4] { 0x11, 0, 0, 0xFF };
+                    serialBytes = new byte[4] { 0x11, 0, 0, 0xFF }; //Digital lines
                     checksum = serialBytes[0];
                     serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[2] = (byte)(checksum & 0xFF);
-                    j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 4);
                     Recieve_Msg();
 
-                    serialBytes = new byte[4] { 0x19, 0, 0, 0xFF };
+                    serialBytes = new byte[4] { 0x19, 0, 0, 0xFF }; //Network Status
                     checksum = serialBytes[0];
                     serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[2] = (byte)(checksum & 0xFF);
-                    j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 4);
                     Recieve_Msg();
 
-                    serialBytes = new byte[4] { 0x0F, 0, 0, 0xFF };
+                    serialBytes = new byte[4] { 0x0F, 0, 0, 0xFF }; //Main Power & Ignition Lines
                     checksum = serialBytes[0];
                     serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[2] = (byte)(checksum & 0xFF);
-                    j = 0;
-                    sentSerialBytes = new byte[12];
-                    for (int i = 0; i < 3; ++i)
-                    {
-                        sentSerialBytes[j] = serialBytes[i];
-                        if (sentSerialBytes[j] == 0xFF)
-                        {
-                            sentSerialBytes[j] = 0xCD;
-                            j++;
-                            sentSerialBytes[j] = 0x55;
-                        }
-                        else if (sentSerialBytes[j] == 0xCD)
-                        {
-                            j++;
-                            sentSerialBytes[j] = 0xAA;
-                        }
-                        else
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                        }
-                        j++;
-                    }
-                    sentSerialBytes[j] = 0xFF;
-                    j++;
-                    SerialObject.Write(sentSerialBytes, 0, j);
+                    SendMessage(SerialObject, serialBytes, 4);
                     Recieve_Msg();
 
                     for (int k = 0; k < 4; k++)
                     {
-                        serialBytes = new byte[5] { 0x1B, (byte)(1 << k), 0, 0, 0xFF };
+                        serialBytes = new byte[5] { 0x1B, (byte)(1 << k), 0, 0, 0xFF }; //Analog Lines
                         checksum = serialBytes[0] + serialBytes[1];
                         serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                         serialBytes[3] = (byte)(checksum & 0xFF);
-                        j = 0;
-                        sentSerialBytes = new byte[12];
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            sentSerialBytes[j] = serialBytes[i];
-                            if (sentSerialBytes[j] == 0xFF)
-                            {
-                                sentSerialBytes[j] = 0xCD;
-                                j++;
-                                sentSerialBytes[j] = 0x55;
-                            }
-                            else if (sentSerialBytes[j] == 0xCD)
-                            {
-                                j++;
-                                sentSerialBytes[j] = 0xAA;
-                            }
-                            else
-                            {
-                                sentSerialBytes[j] = serialBytes[i];
-                            }
-                            j++;
-                        }
-                        sentSerialBytes[j] = 0xFF;
-                        j++;
-                        SerialObject.Write(sentSerialBytes, 0, j);
+                        SendMessage(SerialObject, serialBytes, 5);
                         Recieve_Msg();
                     }
                 }
@@ -5182,7 +2387,7 @@ namespace DVR_Tester_User_Interface
         private void button5_Click(object sender, EventArgs e)
         {
             if (connected)
-            {
+            {                       //Disconnect from Serial.
                 checkBox94.Checked = false;
                 checkBox9.Checked = false;
                 connected = false;
@@ -5203,7 +2408,7 @@ namespace DVR_Tester_User_Interface
                 int q = 1;
                 for (; ; q++)
                 {
-                    if (readBuffer[q - 1] != 0xFF)
+                    if (readBuffer[q - 1] != 0xFF)      //Read until end character byte is found.
                     {
                         SerialObject.Read(readBuffer, q, 1);
                     }
@@ -5216,11 +2421,11 @@ namespace DVR_Tester_User_Interface
                 for (int i = 0; i < q; i++)
                 {
                     readBuffer[length] = readBuffer[i];
-                    if (readBuffer[i] == 0xCA)
+                    if (readBuffer[i] == 0xCD)              //restore 0xFF and 0xCD bytes.
                     {
                         if (readBuffer[i + 1] == 0xAA)
                         {
-                            readBuffer[length] = 0xCA;
+                            readBuffer[length] = 0xCD;
                             ++i;
                         }
                         else
@@ -5235,7 +2440,7 @@ namespace DVR_Tester_User_Interface
                 UInt16 Lines;
                 switch(readBuffer[0])
                 {
-                case 0x0F:
+                case 0x0F:          //Update the Main Power and Ignition Lines
                         if (((readBuffer[2]) & 0x01) == 0x01)
                         {
                             checkBox6.Checked = false;
@@ -5266,7 +2471,7 @@ namespace DVR_Tester_User_Interface
 
                         }
                     break;
-                case 0x11:
+                case 0x11:      //Update the Digital Lines
                     Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
                     for (int i = 0; i < 16; ++i)
                     {
@@ -5284,7 +2489,7 @@ namespace DVR_Tester_User_Interface
                         }
                     }
                     break;
-                case 0x13:
+                case 0x13:      //Update the Relay Lines
                     if ((readBuffer[2] & 0x80) == 0x80)
                     {
                         label106.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
@@ -5372,7 +2577,7 @@ namespace DVR_Tester_User_Interface
                         label34.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
                     }
                     break;
-                case 0x15:
+                case 0x15:      //Update the Video Lines
                     Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
                     for (int i = 0; i < 16; ++i)
                     {
@@ -5390,7 +2595,7 @@ namespace DVR_Tester_User_Interface
                         }
                     }
                     break;
-                case 0x17: 
+                case 0x17:      //Update the Audio Lines
                     Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
                     for (int i = 0; i < 16; ++i)
                     {
@@ -5408,7 +2613,7 @@ namespace DVR_Tester_User_Interface
                         }
                     }
                     break;
-                case 0x19:
+                case 0x19:      //Update the Network Line
                     if (((readBuffer[2]) & 0x01) == 0x01)
                     {
                         checkBox10.Checked = false;
@@ -5424,9 +2629,9 @@ namespace DVR_Tester_User_Interface
 
                     }
                     break;
-                case 0x1B:
+                case 0x1B:       //Update the Analog values
 
-                    switch(readBuffer[2])
+                    switch(readBuffer[2])      
                     {
                         case 0x01:
                             textBox28.Text = readBuffer[3].ToString();
@@ -5442,10 +2647,10 @@ namespace DVR_Tester_User_Interface
                             break;
                     }
                     break;
-                case 0x1C:
+                case 0x1C:                  //Update the LED Lines
                     if (((readBuffer[2]) & 0x01) == 0x01)
                     {
-                        label29.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
+                        label29.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);      
                         label20.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
                     }
                     else
@@ -5469,8 +2674,40 @@ namespace DVR_Tester_User_Interface
             }
             catch { }
         }
-
+        private void SendMessage(SerialPort SerialOb, byte[] Sender, int Length)    //Used to send any messages by Serial.
+        {
+            int j = 0;              //final message size counter
+            byte[] sentSerialBytes = new byte[12];      //Final message sender byte array
+            for (int i = 0; i < (Length-1); ++i)        //search through all of the message except the end 0xFF byte.
+            {
+                sentSerialBytes[j] = Sender[i];
+                if (sentSerialBytes[j] == 0xFF)         //If an 0xFF byte is found
+                {
+                    sentSerialBytes[j] = 0xCD;
+                    j++;
+                    sentSerialBytes[j] = 0x55;         //Repalce with 0xCD55
+                }
+                else if (sentSerialBytes[j] == 0xCD)   //If a 0xCD byte is found
+                {
+                    j++;
+                    sentSerialBytes[j] = 0xAA;        //Add a 0xAA byte
+                }
+                else
+                {
+                    sentSerialBytes[j] = Sender[i];  //Transfer byte to new sender array.
+                }
+                j++;
+            }
+            sentSerialBytes[j] = 0xFF;
+            j++;
+            SerialOb.Write(sentSerialBytes, 0, j);    //Send the message.
+        }
         private void checkBox111_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox45_CheckedChanged(object sender, EventArgs e)
         {
 
         }
