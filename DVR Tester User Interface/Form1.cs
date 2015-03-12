@@ -960,7 +960,7 @@ namespace DVR_Tester_User_Interface
                 checkBox73.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x16, 0x04, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x16, 0x40, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -2418,258 +2418,278 @@ namespace DVR_Tester_User_Interface
                     }
                 }
                 int length = 0;
+                int end = 1;
                 for (int i = 0; i < q; i++)
                 {
                     readBuffer[length] = readBuffer[i];
                     if (readBuffer[i] == 0xCD)              //restore 0xFF and 0xCD bytes.
                     {
-                        if (readBuffer[i + 1] == 0xAA)
+                        end++;
+                        ++i;
+                        if (readBuffer[i] == 0xAA)
                         {
                             readBuffer[length] = 0xCD;
-                            ++i;
                         }
                         else
                         {
                             readBuffer[length] = 0xFF;
-                            ++i;
                         }
-                        i++;
                     }
                     length++;
+                    end++;
+                }
+                for(int k = length; k < end; k++)
+                {
+                    readBuffer[k] = 0x00;
                 }
                 UInt16 Lines;
-                switch(readBuffer[0])
+                UInt16 recievedChksum = (UInt16)((readBuffer[length - 3] << 8) + (byte)readBuffer[length - 2]);
+                UInt16 correctChksum = 0;
+                for (int l = 0; l < (length - 3); ++l)
                 {
-                case 0x0F:          //Update the Main Power and Ignition Lines
-                        if (((readBuffer[2]) & 0x01) == 0x01)
-                        {
-                            checkBox6.Checked = false;
-                            checkBox6.Text = "Ignition ON";
-                            checkBox6.BackColor = Color.LightGreen;
+                    correctChksum += readBuffer[l];
+                }
+                if (recievedChksum == correctChksum)
+                {
+                    switch (readBuffer[0])
+                    {
+                        case 0x0F:          //Update the Main Power and Ignition Lines
+                            if (((readBuffer[2]) & 0x01) == 0x01)
+                            {
+                                checkBox6.Checked = true;
+                                checkBox6.Text = "Ignition OFF";
+                                checkBox6.BackColor = Color.Transparent;
 
-                        }
-                        else
-                        {
-                            checkBox6.Checked = true;
-                            checkBox6.Text = "Ignition OFF";
-                            checkBox6.BackColor = Color.Transparent;
+                            }
+                            else
+                            {
+                                checkBox6.Checked = false;
+                                checkBox6.Text = "Ignition ON";
+                                checkBox6.BackColor = Color.LightGreen;
 
-                        }
+                            }
 
-                        if (((readBuffer[2]) & 0x02) == 0x02)
-                        {
-                            checkBox7.Checked = false;
-                            checkBox7.Text = "Main Power ON";
-                            checkBox7.BackColor = Color.LightGreen;
+                            if (((readBuffer[2]) & 0x02) == 0x02)
+                            {
+                                checkBox7.Checked = true;
+                                checkBox7.Text = "Main Power OFF";
+                                checkBox7.BackColor = Color.Transparent;
 
-                        }
-                        else
-                        {
-                            checkBox7.Checked = true;
-                            checkBox7.Text = "Main Power OFF";
-                            checkBox7.BackColor = Color.Transparent;
+                            }
+                            else
+                            {
+                                checkBox7.Checked = false;
+                                checkBox7.Text = "Main Power ON";
+                                checkBox7.BackColor = Color.LightGreen;
 
-                        }
-                    break;
-                case 0x11:      //Update the Digital Lines
-                    Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
-                    for (int i = 0; i < 16; ++i)
-                    {
-                        if (((Lines >> i) & 0x0001) == 0x0001)
-                        {
-                            DigitalLines[i].Checked = false;
-                            DigitalLines[i].Text = "Digital #" + (i + 1).ToString() + " ON";
-                            DigitalLines[i].BackColor = Color.LightGreen;
-                        }
-                        else
-                        {
-                            DigitalLines[i].Checked = true;
-                            DigitalLines[i].Text = "Digital #" + (i + 1).ToString() + " OFF";
-                            DigitalLines[i].BackColor = Color.Transparent;
-                        }
-                    }
-                    break;
-                case 0x13:      //Update the Relay Lines
-                    if ((readBuffer[2] & 0x80) == 0x80)
-                    {
-                        label106.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
-                        label23.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
-                    }
-                    else
-                    {
-                        label106.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label23.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-
-                    if ((readBuffer[2] & 0x40) == 0x40)
-                    {
-                        label107.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
-                        label24.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
-                    }
-                    else
-                    {
-                        label107.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label24.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-
-                    if ((readBuffer[2] & 0x20) == 0x20)
-                    {
-                        label104.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
-                        label25.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
-                    }
-                    else
-                    {
-                        label104.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label25.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-
-                    if ((readBuffer[2] & 0x10) == 0x10)
-                    {
-                        label105.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
-                        label26.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
-                    }
-                    else
-                    {
-                        label105.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label26.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-
-                    if ((readBuffer[2] & 0x08) == 0x08)
-                    {
-                        label102.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
-                        label27.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
-                    }
-                    else
-                    {
-                        label102.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label27.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-
-                    if ((readBuffer[2] & 0x04) == 0x04)
-                    {
-                        label103.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
-                        label32.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
-                    }
-                    else
-                    {
-                        label103.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label32.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-                    if ((readBuffer[2] & 0x02) == 0x02)
-                    {
-                        label100.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
-                        label33.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
-                    }
-                    else
-                    {
-                        label100.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label33.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-
-                    if ((readBuffer[2] & 0x01) == 0x01)
-                    {
-                        label98.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
-                        label34.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
-                    }
-                    else
-                    {
-                        label98.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label34.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-                    break;
-                case 0x15:      //Update the Video Lines
-                    Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
-                    for (int i = 0; i < 16; ++i)
-                    {
-                        if (((Lines >> i) & 0x0001) == 0x0001)
-                        {
-                            VideoLines[i].Checked = false;
-                            VideoLines[i].Text = "Video #" + (i + 1).ToString() + " ON";
-                            VideoLines[i].BackColor = Color.LightGreen;
-                        }
-                        else
-                        {
-                            VideoLines[i].Checked = true;
-                            VideoLines[i].Text = "Video #" + (i + 1).ToString() + " OFF";
-                            VideoLines[i].BackColor = Color.Transparent;
-                        }
-                    }
-                    break;
-                case 0x17:      //Update the Audio Lines
-                    Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
-                    for (int i = 0; i < 16; ++i)
-                    {
-                        if (((Lines >> i) & 0x0001) == 0x0001)
-                        {
-                            AudioLines[i].Checked = false;
-                            AudioLines[i].Text = "Audio #" + (i + 1).ToString() + " ON";
-                            AudioLines[i].BackColor = Color.LightGreen;
-                        }
-                        else
-                        {
-                            AudioLines[i].Checked = true;
-                            AudioLines[i].Text = "Audio #" + (i + 1).ToString() + " OFF";
-                            AudioLines[i].BackColor = Color.Transparent;
-                        }
-                    }
-                    break;
-                case 0x19:      //Update the Network Line
-                    if (((readBuffer[2]) & 0x01) == 0x01)
-                    {
-                        checkBox10.Checked = false;
-                        checkBox10.Text = "Network ON";
-                        checkBox10.BackColor = Color.LightGreen;
-
-                    }
-                    else
-                    {
-                        checkBox10.Checked = true;
-                        checkBox10.Text = "Network OFF";
-                        checkBox10.BackColor = Color.Transparent;
-
-                    }
-                    break;
-                case 0x1B:       //Update the Analog values
-
-                    switch(readBuffer[2])      
-                    {
-                        case 0x01:
-                            textBox28.Text = readBuffer[3].ToString();
+                            }
                             break;
-                        case 0x02:
-                            textBox27.Text = readBuffer[3].ToString();
+                        case 0x11:      //Update the Digital Lines
+                            Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
+                            for (int i = 0; i < 16; ++i)
+                            {
+                                if (((Lines >> i) & 0x0001) == 0x0001)
+                                {
+                                    DigitalLines[i].Checked = false;
+                                    DigitalLines[i].Text = "Digital #" + (i + 1).ToString() + " ON";
+                                    DigitalLines[i].BackColor = Color.LightGreen;
+                                }
+                                else
+                                {
+                                    DigitalLines[i].Checked = true;
+                                    DigitalLines[i].Text = "Digital #" + (i + 1).ToString() + " OFF";
+                                    DigitalLines[i].BackColor = Color.Transparent;
+                                }
+                            }
                             break;
-                        case 0x04:
-                            textBox26.Text = readBuffer[3].ToString();
-                            break;
-                        case 0x08:
-                            textBox25.Text = readBuffer[3].ToString();
-                            break;
-                    }
-                    break;
-                case 0x1C:                  //Update the LED Lines
-                    if (((readBuffer[2]) & 0x01) == 0x01)
-                    {
-                        label29.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);      
-                        label20.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
-                    }
-                    else
-                    {
-                        label29.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label20.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
+                        case 0x13:      //Update the Relay Lines
+                            if ((readBuffer[2] & 0x80) == 0x80)
+                            {
+                                label106.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
+                                label23.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
+                            }
+                            else
+                            {
+                                label106.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label23.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
 
-                    if (((readBuffer[2]) & 0x02) == 0x02)
-                    {
-                        label16.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
-                        label28.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
+                            if ((readBuffer[2] & 0x40) == 0x40)
+                            {
+                                label107.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
+                                label24.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
+                            }
+                            else
+                            {
+                                label107.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label24.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+
+                            if ((readBuffer[2] & 0x20) == 0x20)
+                            {
+                                label104.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
+                                label25.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
+                            }
+                            else
+                            {
+                                label104.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label25.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+
+                            if ((readBuffer[2] & 0x10) == 0x10)
+                            {
+                                label105.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
+                                label26.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
+                            }
+                            else
+                            {
+                                label105.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label26.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+
+                            if ((readBuffer[2] & 0x08) == 0x08)
+                            {
+                                label102.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
+                                label27.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
+                            }
+                            else
+                            {
+                                label102.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label27.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+
+                            if ((readBuffer[2] & 0x04) == 0x04)
+                            {
+                                label103.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
+                                label32.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
+                            }
+                            else
+                            {
+                                label103.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label32.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+                            if ((readBuffer[2] & 0x02) == 0x02)
+                            {
+                                label100.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
+                                label33.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Red);
+                            }
+                            else
+                            {
+                                label100.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label33.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+
+                            if ((readBuffer[2] & 0x01) == 0x01)
+                            {
+                                label98.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
+                                label34.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Yellow);
+                            }
+                            else
+                            {
+                                label98.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label34.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+                            break;
+                        case 0x15:      //Update the Video Lines
+                            Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
+                            for (int i = 0; i < 16; ++i)
+                            {
+                                if (((Lines >> i) & 0x0001) != 0x0001)
+                                {
+                                    VideoLines[i].Checked = false;
+                                    VideoLines[i].Text = "Video #" + (i + 1).ToString() + " ON";
+                                    VideoLines[i].BackColor = Color.LightGreen;
+                                    if (i == 1)
+                                    {
+                                        i = 1;
+                                    }
+                                }
+                                else
+                                {
+                                    VideoLines[i].Checked = true;
+                                    VideoLines[i].Text = "Video #" + (i + 1).ToString() + " OFF";
+                                    VideoLines[i].BackColor = Color.Transparent;
+                                }
+                            }
+                            break;
+                        case 0x17:      //Update the Audio Lines
+                            Lines = (UInt16)((readBuffer[2] << 8) + readBuffer[3]);
+                            for (int i = 0; i < 16; ++i)
+                            {
+                                if (((Lines >> i) & 0x0001) != 0x0001)
+                                {
+                                    AudioLines[i].Checked = false;
+                                    AudioLines[i].Text = "Audio #" + (i + 1).ToString() + " ON";
+                                    AudioLines[i].BackColor = Color.LightGreen;
+                                }
+                                else
+                                {
+                                    AudioLines[i].Checked = true;
+                                    AudioLines[i].Text = "Audio #" + (i + 1).ToString() + " OFF";
+                                    AudioLines[i].BackColor = Color.Transparent;
+                                }
+                            }
+                            break;
+                        case 0x19:      //Update the Network Line
+                            if (((readBuffer[2]) & 0x01) != 0x01)
+                            {
+                                checkBox10.Checked = false;
+                                checkBox10.Text = "Network ON";
+                                checkBox10.BackColor = Color.LightGreen;
+
+                            }
+                            else
+                            {
+                                checkBox10.Checked = true;
+                                checkBox10.Text = "Network OFF";
+                                checkBox10.BackColor = Color.Transparent;
+
+                            }
+                            break;
+                        case 0x1B:       //Update the Analog values
+
+                            switch (readBuffer[2])
+                            {
+                                case 0x01:
+                                    textBox28.Text = readBuffer[3].ToString();
+                                    break;
+                                case 0x02:
+                                    textBox27.Text = readBuffer[3].ToString();
+                                    break;
+                                case 0x04:
+                                    textBox26.Text = readBuffer[3].ToString();
+                                    break;
+                                case 0x08:
+                                    textBox25.Text = readBuffer[3].ToString();
+                                    break;
+                            }
+                            break;
+                        case 0x1C:                  //Update the LED Lines
+                            if (((readBuffer[2]) & 0x01) != 0x01)
+                            {
+                                label29.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
+                                label20.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
+                            }
+                            else
+                            {
+                                label29.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label20.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+
+                            if (((readBuffer[2]) & 0x02) == 0x02)
+                            {
+                                label16.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
+                                label28.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Green1);
+                            }
+                            else
+                            {
+                                label16.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                                label28.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
+                            }
+                            break;
                     }
-                    else
-                    {
-                        label16.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                        label28.Image = new Bitmap(DVR_Tester_User_Interface.Properties.Resources.Dark_Brown);
-                    }
-                    break;
+                }else{
+   //                 correctChksum = 0;
                 }
             }
             catch { }
