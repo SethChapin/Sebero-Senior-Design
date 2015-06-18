@@ -2268,7 +2268,10 @@ namespace DVR_Tester_User_Interface
                 }
                 catch (Exception)
                 {
-
+                    checkBox94.Checked = false;
+                    checkBox9.Checked = false;
+                    connected = false;
+                    SerialObject.Close();
                 }
             }
         }
@@ -2373,68 +2376,78 @@ namespace DVR_Tester_User_Interface
             byte[] serialBytes;
             if (connected)      //Ask for Line Updates
             {
-                serialBytes = new byte[4] { 0x13, 0, 0, 0xFF };     //Relay Lines
-                int checksum = serialBytes[0];
-                serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
-                serialBytes[2] = (byte)(checksum & 0xFF);
-                SendMessage(SerialObject, serialBytes, 4);
-                Recieve_Msg();
-
-                serialBytes = new byte[4] { 0x1C, 0, 0, 0xFF };    //LED Lines
-                checksum = serialBytes[0];
-                serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
-                serialBytes[2] = (byte)(checksum & 0xFF);
-                SendMessage(SerialObject, serialBytes, 4);
-                Recieve_Msg();
-
-                if (UI.SelectedIndex == 0)
+                try
                 {
-                    serialBytes = new byte[4] { 0x17, 0, 0, 0xFF }; //Audio Lines
+                    serialBytes = new byte[4] { 0x13, 0, 0, 0xFF };     //Relay Lines
+                    int checksum = serialBytes[0];
+                    serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
+                    serialBytes[2] = (byte)(checksum & 0xFF);
+                    SendMessage(SerialObject, serialBytes, 4);
+                    Recieve_Msg();
+
+                    serialBytes = new byte[4] { 0x1C, 0, 0, 0xFF };    //LED Lines
                     checksum = serialBytes[0];
                     serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[2] = (byte)(checksum & 0xFF);
                     SendMessage(SerialObject, serialBytes, 4);
                     Recieve_Msg();
 
-
-                    serialBytes = new byte[4] { 0x15, 0, 0, 0xFF }; //Video Lines
-                    checksum = serialBytes[0];
-                    serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
-                    serialBytes[2] = (byte)(checksum & 0xFF);
-                    SendMessage(SerialObject, serialBytes, 4);
-                    Recieve_Msg();
-
-
-                    serialBytes = new byte[4] { 0x11, 0, 0, 0xFF }; //Digital lines
-                    checksum = serialBytes[0];
-                    serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
-                    serialBytes[2] = (byte)(checksum & 0xFF);
-                    SendMessage(SerialObject, serialBytes, 4);
-                    Recieve_Msg();
-
-                    serialBytes = new byte[4] { 0x19, 0, 0, 0xFF }; //Network Status
-                    checksum = serialBytes[0];
-                    serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
-                    serialBytes[2] = (byte)(checksum & 0xFF);
-                    SendMessage(SerialObject, serialBytes, 4);
-                    Recieve_Msg();
-
-                    serialBytes = new byte[4] { 0x0F, 0, 0, 0xFF }; //Main Power & Ignition Lines
-                    checksum = serialBytes[0];
-                    serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
-                    serialBytes[2] = (byte)(checksum & 0xFF);
-                    SendMessage(SerialObject, serialBytes, 4);
-                    Recieve_Msg();
-
-                    for (int k = 0; k < 4; k++)
+                    if (UI.SelectedIndex == 0)
                     {
-                        serialBytes = new byte[5] { 0x1B, (byte)(1 << k), 0, 0, 0xFF }; //Analog Lines
-                        checksum = serialBytes[0] + serialBytes[1];
-                        serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
-                        serialBytes[3] = (byte)(checksum & 0xFF);
-                        SendMessage(SerialObject, serialBytes, 5);
+                        serialBytes = new byte[4] { 0x17, 0, 0, 0xFF }; //Audio Lines
+                        checksum = serialBytes[0];
+                        serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
+                        serialBytes[2] = (byte)(checksum & 0xFF);
+                        SendMessage(SerialObject, serialBytes, 4);
                         Recieve_Msg();
+
+
+                        serialBytes = new byte[4] { 0x15, 0, 0, 0xFF }; //Video Lines
+                        checksum = serialBytes[0];
+                        serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
+                        serialBytes[2] = (byte)(checksum & 0xFF);
+                        SendMessage(SerialObject, serialBytes, 4);
+                        Recieve_Msg();
+
+
+                        serialBytes = new byte[4] { 0x11, 0, 0, 0xFF }; //Digital lines
+                        checksum = serialBytes[0];
+                        serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
+                        serialBytes[2] = (byte)(checksum & 0xFF);
+                        SendMessage(SerialObject, serialBytes, 4);
+                        Recieve_Msg();
+
+                        serialBytes = new byte[4] { 0x19, 0, 0, 0xFF }; //Network Status
+                        checksum = serialBytes[0];
+                        serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
+                        serialBytes[2] = (byte)(checksum & 0xFF);
+                        SendMessage(SerialObject, serialBytes, 4);
+                        Recieve_Msg();
+
+                        serialBytes = new byte[4] { 0x0F, 0, 0, 0xFF }; //Main Power & Ignition Lines
+                        checksum = serialBytes[0];
+                        serialBytes[1] = (byte)((checksum & 0xFF00) >> 8);
+                        serialBytes[2] = (byte)(checksum & 0xFF);
+                        SendMessage(SerialObject, serialBytes, 4);
+                        Recieve_Msg();
+
+                        for (int k = 0; k < 4; k++)
+                        {
+                            serialBytes = new byte[5] { 0x1B, (byte)(1 << k), 0, 0, 0xFF }; //Analog Lines
+                            checksum = serialBytes[0] + serialBytes[1];
+                            serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
+                            serialBytes[3] = (byte)(checksum & 0xFF);
+                            SendMessage(SerialObject, serialBytes, 5);
+                            Recieve_Msg();
+                        }
                     }
+                }
+                catch
+                {
+                    checkBox94.Checked = false;
+                    checkBox9.Checked = false;
+                    connected = false;
+                    SerialObject.Close();
                 }
             }
         }
@@ -2465,7 +2478,10 @@ namespace DVR_Tester_User_Interface
                 }
                 catch (Exception)
                 {
-
+                    checkBox94.Checked = false;
+                    checkBox9.Checked = false;
+                    connected = false;
+                    SerialObject.Close();
                 }
             }
         }
@@ -2833,7 +2849,13 @@ namespace DVR_Tester_User_Interface
    //                 correctChksum = 0;
                 }
             }
-            catch { }
+            catch
+            {
+                checkBox94.Checked = false;
+                checkBox9.Checked = false;
+                connected = false;
+                SerialObject.Close();
+            }
         }
         private void SendMessage(SerialPort SerialOb, byte[] Sender, int Length)    //Used to send any messages by Serial.
         {
@@ -2861,7 +2883,17 @@ namespace DVR_Tester_User_Interface
             }
             sentSerialBytes[j] = 0xFF;
             j++;
-            SerialOb.Write(sentSerialBytes, 0, j);    //Send the message.
+            try
+            {
+                SerialOb.Write(sentSerialBytes, 0, j);    //Send the message.
+            }
+            catch
+            {
+                checkBox94.Checked = false;
+                checkBox9.Checked = false;
+                connected = false;
+                SerialObject.Close();
+            }
         }
         private void checkBox111_CheckedChanged(object sender, EventArgs e)
         {
