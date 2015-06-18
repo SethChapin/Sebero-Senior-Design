@@ -23,32 +23,87 @@ namespace DVR_Tester_User_Interface
             Test_Paramater[] Video_Chnls = new Test_Paramater[16];   //Defines the paramaters for each Video channel
             Test_Paramater[] Analog_Inpts = new Test_Paramater[4];   //Defines the paramaters for each Analog channel
             Test_Paramater[] Digital_Inpts = new Test_Paramater[16]; //Defines the paramaters for each Digital channel
-            Test_Paramater[] Relay_Outpts = new Test_Paramater[4];   //Defines the paramaters for each Relay Output
+            Test_Paramater[] Relay_Outpts = new Test_Paramater[2];   //Defines the paramaters for each Relay Output
+            List<String> AudioCollection, VideoCollection, DigitalCollection, NetworkCollection, Power_IGNCollection, VVoltCollection;
+            List<TestCommand> AutoTest = new List<TestCommand>();
+            
         public Form1()
         {
 
             InitializeComponent();
+
+            AudioCollection = new List<String>();
+            VideoCollection = new List<String>();
+            DigitalCollection = new List<String>();
+            NetworkCollection = new List<String>();
+            Power_IGNCollection = new List<String>();
+            VVoltCollection = new List<String>();
+
+            AudioCollection.Add("Audio #1");
+            AudioCollection.Add("Audio #2");
+            AudioCollection.Add("Audio #3");
+            AudioCollection.Add("Audio #4");
+            AudioCollection.Add("Audio #5");
+            AudioCollection.Add("Audio #6");
+            AudioCollection.Add("Audio #7");
+            AudioCollection.Add("Audio #8");
+            AudioCollection.Add("Audio #9");
+            AudioCollection.Add("Audio #10");
+            AudioCollection.Add("Audio #11");
+            AudioCollection.Add("Audio #12");
+            AudioCollection.Add("Audio #13");
+            AudioCollection.Add("Audio #14");
+            AudioCollection.Add("Audio #15");
+            AudioCollection.Add("Audio #16");
+
+            VideoCollection.Add("Video #1");
+            VideoCollection.Add("Video #2");
+            VideoCollection.Add("Video #3");
+            VideoCollection.Add("Video #4");
+            VideoCollection.Add("Video #5");
+            VideoCollection.Add("Video #6");
+            VideoCollection.Add("Video #7");
+            VideoCollection.Add("Video #8");
+            VideoCollection.Add("Video #9");
+            VideoCollection.Add("Video #10");
+            VideoCollection.Add("Video #11");
+            VideoCollection.Add("Video #12");
+            VideoCollection.Add("Video #13");
+            VideoCollection.Add("Video #14");
+            VideoCollection.Add("Video #15");
+            VideoCollection.Add("Video #16");
+
+
+            DigitalCollection.Add("Digital #1");
+            DigitalCollection.Add("Digital #2");
+            DigitalCollection.Add("Digital #3");
+            DigitalCollection.Add("Digital #4");
+            DigitalCollection.Add("Digital #5");
+            DigitalCollection.Add("Digital #6");
+            DigitalCollection.Add("Digital #7");
+            DigitalCollection.Add("Digital #8");
+            DigitalCollection.Add("Digital #9");
+            DigitalCollection.Add("Digital #10");
+            DigitalCollection.Add("Digital #11");
+            DigitalCollection.Add("Digital #12");
+            DigitalCollection.Add("Digital #13");
+            DigitalCollection.Add("Digital #14");
+            DigitalCollection.Add("Digital #15");
+            DigitalCollection.Add("Digital #16");
+
+            VVoltCollection.Add("Variable Vol. #1");
+            VVoltCollection.Add("Variable Vol. #2");
+            VVoltCollection.Add("Variable Vol. #3");
+            VVoltCollection.Add("Variable Vol. #4");
+
+            Power_IGNCollection.Add("Main Power");
+            Power_IGNCollection.Add("Ignition");
+
+            NetworkCollection.Add("Network #1");
+
             textBox1.Text = "0";
             textBox2.Text = "0";
-            textBox3.Text = "0";
-            textBox4.Text = "0";
-            textBox5.Text = "0";
-            textBox6.Text = "0";
-            textBox7.Text = "0";
-            textBox8.Text = "0";
-            textBox9.Text = "0";
-            textBox10.Text = "0";
-            textBox11.Text = "0";
-            textBox12.Text = "0";
-            textBox13.Text = "0";
-            textBox14.Text = "0";
-            textBox15.Text = "0";
-            textBox16.Text = "0";
-            textBox17.Text = "0";
-            textBox18.Text = "0";
-            textBox19.Text = "0";
-            textBox20.Text = "0";
-
+           
             AudioLines[0] = checkBox111;
             AudioLines[1] = checkBox110;
             AudioLines[2] = checkBox109;
@@ -67,20 +122,20 @@ namespace DVR_Tester_User_Interface
             AudioLines[15] = checkBox46;
 
             VideoLines[0] = checkBox45;
-            VideoLines[1] = checkBox44;
-            VideoLines[2] = checkBox43;
+            VideoLines[1] = checkBox43;
+            VideoLines[2] = checkBox44;
             VideoLines[3] = checkBox42;
             VideoLines[4] = checkBox41;
-            VideoLines[5] = checkBox40;
-            VideoLines[6] = checkBox39;
+            VideoLines[5] = checkBox39;
+            VideoLines[6] = checkBox40;
             VideoLines[7] = checkBox38;
             VideoLines[8] = checkBox37;
-            VideoLines[9] = checkBox36;
-            VideoLines[10] = checkBox35;
+            VideoLines[9] = checkBox35;
+            VideoLines[10] = checkBox36;
             VideoLines[11] = checkBox34;
             VideoLines[12] = checkBox33;
-            VideoLines[13] = checkBox32;
-            VideoLines[14] = checkBox31;
+            VideoLines[13] = checkBox31;
+            VideoLines[14] = checkBox32;
             VideoLines[15] = checkBox30;
 
             DigitalLines[0] = checkBox29;
@@ -100,6 +155,9 @@ namespace DVR_Tester_User_Interface
             DigitalLines[14] = checkBox13;
             DigitalLines[15] = checkBox12;
 
+            comboBox4.SelectedIndex = 0;
+            AutoTestNumber.SelectedIndex = 0;
+
             //Initializing each of the channels
             for (int i = 0; i < 16; ++i)
             {
@@ -111,9 +169,13 @@ namespace DVR_Tester_User_Interface
             for( int i = 0; i < 4; ++i)
             {
                 Analog_Inpts[i] = new Test_Paramater("Analog_Input_" + i);
-                Relay_Outpts[i] = new Test_Paramater("Relay_Output_" + i);
             }
 
+            Relay_Outpts[0] = new Test_Paramater("Relay_Output_" + 0);
+            Relay_Outpts[1] = new Test_Paramater("Relay_Output_" + 1);
+
+            Test_Paramater Network_Break = new Test_Paramater("Network_Break");
+            /*
             Digital_Inputs.Tag = 0;  //initialize the last used index to the first channel so that it isn't null when used the first time.
             Analog_Inputs.Tag = 0;
             Audio_Channels.Tag = 0;
@@ -124,12 +186,14 @@ namespace DVR_Tester_User_Interface
             Analog_Inputs.SelectedIndex = 0;
             Audio_Channels.SelectedIndex = 0;
             Video_Channels.SelectedIndex = 0;
-            Relay_Outputs.SelectedIndex = 0; 
+            Relay_Outputs.SelectedIndex = 0;
+            Network_Breaks.SelectedIndex = 0; 
+             * */
         }
 
-        private void Audio_Channels_SelectedIndexChanged(object sender, EventArgs e)
+        private void AutoTest_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Sets the last user inputs for the correct paramater before changing to the new paramater.
+        /*    //Sets the last user inputs for the correct paramater before changing to the new paramater.
             Audio_Chnls[(int)(Audio_Channels.Tag)].delay = long.Parse(textBox2.Text);
             Audio_Chnls[(int)(Audio_Channels.Tag)].timeOn = long.Parse(textBox11.Text);
             Audio_Chnls[(int)(Audio_Channels.Tag)].timeOff = long.Parse(textBox16.Text);
@@ -142,10 +206,12 @@ namespace DVR_Tester_User_Interface
                 textBox11.Text = Audio_Chnls[Audio_Channels.SelectedIndex].timeOn.ToString();   //sets the timeOn text to the saved value
                 textBox16.Text = Audio_Chnls[Audio_Channels.SelectedIndex].timeOff.ToString();  //sets the timeOff text to the saved value
             }
+         * */
         }
 
         private void Video_Channels_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             //Sets the last user inputs for the correct paramater before changing to the new paramater.
             Video_Chnls[(int)(Video_Channels.Tag)].delay = long.Parse(textBox3.Text);
             Video_Chnls[(int)(Video_Channels.Tag)].timeOn = long.Parse(textBox12.Text);
@@ -159,10 +225,12 @@ namespace DVR_Tester_User_Interface
                 textBox12.Text = Video_Chnls[Video_Channels.SelectedIndex].timeOn.ToString();   //sets the timeOn text to the saved value
                 textBox17.Text = Video_Chnls[Video_Channels.SelectedIndex].timeOff.ToString();  //sets the timeOff text to the saved value
             }
+             * */
         }
 
         private void Analog_Inputs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             //Sets the last user inputs for the correct paramater before changing to the new paramater.
             Analog_Inpts[(int)(Analog_Inputs.Tag)].delay = long.Parse(textBox4.Text);
             Analog_Inpts[(int)(Analog_Inputs.Tag)].timeOn = long.Parse(textBox13.Text);
@@ -176,10 +244,12 @@ namespace DVR_Tester_User_Interface
                 textBox13.Text = Analog_Inpts[Analog_Inputs.SelectedIndex].timeOn.ToString();   //sets the timeOn text to the saved value
                 textBox18.Text = Analog_Inpts[Analog_Inputs.SelectedIndex].timeOff.ToString();  //sets the timeOff text to the saved value
             }
+             * */
         }
 
         private void Digital_Inputs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             //Sets the last user inputs for the correct paramater before changing to the new paramater.
             Digital_Inpts[(int)(Digital_Inputs.Tag)].delay = long.Parse(textBox5.Text);
             Digital_Inpts[(int)(Digital_Inputs.Tag)].timeOn = long.Parse(textBox14.Text);
@@ -193,10 +263,12 @@ namespace DVR_Tester_User_Interface
                 textBox14.Text = Digital_Inpts[Digital_Inputs.SelectedIndex].timeOn.ToString();  //sets the timeOn text to the saved value
                 textBox19.Text = Digital_Inpts[Digital_Inputs.SelectedIndex].timeOff.ToString(); //sets the timeOff text to the saved value
             }
+             */
         }
 
         private void Relay_Outputs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             //Sets the last user inputs for the correct paramater before changing to the new paramater.
             Relay_Outpts[(int)(Relay_Outputs.Tag)].delay = long.Parse(textBox1.Text);
             Relay_Outpts[(int)(Relay_Outputs.Tag)].timeOn = long.Parse(textBox15.Text);
@@ -210,11 +282,13 @@ namespace DVR_Tester_User_Interface
                 textBox15.Text = Relay_Outpts[Relay_Outputs.SelectedIndex].timeOn.ToString();    //sets the timeOn text to the saved value
                 textBox20.Text = Relay_Outpts[Relay_Outputs.SelectedIndex].timeOff.ToString();   //sets the timeOff text to the saved value
             }
+             */
 
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+            /*
             Audio_Chnls[Audio_Channels.SelectedIndex].enabled = !checkBox1.Checked;  //Save the changes to the test paramater
 
             //Toggle between Enabled and Disabled
@@ -226,10 +300,12 @@ namespace DVR_Tester_User_Interface
             {
                 checkBox1.Text = "Enabled";
             }
+             */
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
+            /*
             Video_Chnls[Video_Channels.SelectedIndex].enabled = !checkBox2.Checked;  //Save the changes to the test paramater
 
             //Toggle between Enabled and Disabled
@@ -241,10 +317,12 @@ namespace DVR_Tester_User_Interface
             {
                 checkBox2.Text = "Enabled";
             }
+             */
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
+            /*
             Analog_Inpts[Analog_Inputs.SelectedIndex].enabled = !checkBox3.Checked; //Save the changes to the test paramater
 
             //Toggle between Enabled and Disabled            
@@ -256,10 +334,12 @@ namespace DVR_Tester_User_Interface
             {
                 checkBox3.Text = "Enabled";
             }
+             */
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
+            /*
             Digital_Inpts[Digital_Inputs.SelectedIndex].enabled = !checkBox4.Checked;   //Save the changes to the test paramater
 
             //Toggle between Enabled and Disabled
@@ -271,9 +351,11 @@ namespace DVR_Tester_User_Interface
             {
                 checkBox4.Text = "Enabled";
             }
+             */
         }
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
+            /*
             Relay_Outpts[Relay_Outputs.SelectedIndex].enabled = !checkBox5.Checked;     //Save the changes to the test paramater
 
             //Toggle between Enabled and Disabled
@@ -285,11 +367,13 @@ namespace DVR_Tester_User_Interface
             {
                 checkBox5.Text = "Enabled";
             }
+             */
 
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            /*
             if (SaveName.Visible == true)                       //Completing the save process
             {
                 SaveName.Visible = false;                       //Remove the save name text box
@@ -380,10 +464,12 @@ namespace DVR_Tester_User_Interface
                 SaveName.Text = "";                             //Clear any previous save names in the text box
                 button4.Visible = false;                        //temporarily remove the Load button
             }
+             * */
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
+            /*
             if (SaveList.Visible == true)                   //Completing the load process
             {
                 SaveList.Visible = false;                   //Remove the saved tests list
@@ -402,7 +488,7 @@ namespace DVR_Tester_User_Interface
                 SaveList.Visible = true;                    //Display the save drop down list
                 button3.Visible = false;                    //Temporarily remove the save button
             }
-
+            */
         }
 
         private void label12_Click(object sender, EventArgs e)
@@ -1018,11 +1104,11 @@ namespace DVR_Tester_User_Interface
             byte[] serialBytes;
             if (checkBox66.Checked == true)             //Sends line update command to test unit
             {
-                checkBox66.Text = "Video #2 OFF";
+                checkBox66.Text = "Video #2 OFF";       //We flipped lines 3 & 2 so that they are correct on the test unit.
                 checkBox66.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x14, 0x00, 0x02, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x14, 0x00, 0x04, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1035,7 +1121,7 @@ namespace DVR_Tester_User_Interface
                 checkBox66.BackColor = Color.LightGreen;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x24, 0x00, 0x02, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x24, 0x00, 0x04, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1049,11 +1135,11 @@ namespace DVR_Tester_User_Interface
             byte[] serialBytes;
             if (checkBox61.Checked == true)             //Sends line update command to test unit
             {
-                checkBox61.Text = "Video #3 OFF";
+                checkBox61.Text = "Video #3 OFF";      //We flipped lines 3 & 2 so that they are correct on the test unit.
                 checkBox61.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x14, 0x00, 0x04, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x14, 0x00, 0x02, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1066,7 +1152,7 @@ namespace DVR_Tester_User_Interface
                 checkBox61.BackColor = Color.LightGreen;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x24, 0x00, 0x04, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x24, 0x00, 0x02, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1146,7 +1232,7 @@ namespace DVR_Tester_User_Interface
                 checkBox58.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x14, 0x00, 0x20, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x14, 0x00, 0x40, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1159,7 +1245,7 @@ namespace DVR_Tester_User_Interface
                 checkBox58.BackColor = Color.LightGreen;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x24, 0x00, 0x20, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x24, 0x00, 0x40, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1177,7 +1263,7 @@ namespace DVR_Tester_User_Interface
                 checkBox57.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x14, 0x00, 0x40, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x14, 0x00, 0x20, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1190,7 +1276,7 @@ namespace DVR_Tester_User_Interface
                 checkBox57.BackColor = Color.LightGreen;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x24, 0x00, 0x40, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x24, 0x00, 0x20, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1270,7 +1356,7 @@ namespace DVR_Tester_User_Interface
                 checkBox54.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x14, 0x02, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x14, 0x04, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1283,7 +1369,7 @@ namespace DVR_Tester_User_Interface
                 checkBox54.BackColor = Color.LightGreen;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x24, 0x02, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x24, 0x04, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1301,7 +1387,7 @@ namespace DVR_Tester_User_Interface
                 checkBox53.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x14, 0x04, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x14, 0x02, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1314,7 +1400,7 @@ namespace DVR_Tester_User_Interface
                 checkBox53.BackColor = Color.LightGreen;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x24, 0x04, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x24, 0x02, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1394,7 +1480,7 @@ namespace DVR_Tester_User_Interface
                 checkBox50.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x14, 0x20, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x14, 0x40, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1407,7 +1493,7 @@ namespace DVR_Tester_User_Interface
                 checkBox50.BackColor = Color.LightGreen;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x24, 0x20, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x24, 0x40, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1425,7 +1511,7 @@ namespace DVR_Tester_User_Interface
                 checkBox17.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x14, 0x40, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x14, 0x20, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1438,7 +1524,7 @@ namespace DVR_Tester_User_Interface
                 checkBox17.BackColor = Color.LightGreen;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x24, 0x40, 0x00, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x24, 0x20, 0x00, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -1518,7 +1604,7 @@ namespace DVR_Tester_User_Interface
                 checkBox102.BackColor = Color.Transparent;
                 if (connected)
                 {
-                    serialBytes = new byte[6] { 0x10, 0x00, 0x02, 0, 0, 0xFF };
+                    serialBytes = new byte[6] { 0x20, 0x00, 0x02, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1] + serialBytes[2];
                     serialBytes[3] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[4] = (byte)(checksum & 0xFF);
@@ -2115,7 +2201,7 @@ namespace DVR_Tester_User_Interface
                 checkBox112.Text = "Main Power OFF";
                 checkBox112.BackColor = Color.Transparent; if (connected)
                 {
-                    serialBytes = new byte[5] { 0x2E, 0x02, 0, 0, 0xFF };
+                    serialBytes = new byte[5] { 0x2E, 0x01, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
@@ -2127,7 +2213,7 @@ namespace DVR_Tester_User_Interface
                 checkBox112.Text = "Main Power ON";
                 checkBox112.BackColor = Color.LightGreen; if (connected)
                 {
-                    serialBytes = new byte[5] { 0x0E, 0x02, 0, 0, 0xFF };
+                    serialBytes = new byte[5] { 0x0E, 0x01, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
@@ -2145,7 +2231,7 @@ namespace DVR_Tester_User_Interface
                 checkBox113.Text = "Ignition OFF";
                 checkBox113.BackColor = Color.Transparent; if (connected)
                 {
-                    serialBytes = new byte[5] { 0x2E, 0x01, 0, 0, 0xFF };
+                    serialBytes = new byte[5] { 0x2E, 0x02, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
@@ -2157,7 +2243,7 @@ namespace DVR_Tester_User_Interface
                 checkBox113.Text = "Ignition ON";
                 checkBox113.BackColor = Color.LightGreen; if (connected)
                 {
-                    serialBytes = new byte[5] { 0x0E, 0x01, 0, 0, 0xFF };
+                    serialBytes = new byte[5] { 0x0E, 0x02, 0, 0, 0xFF };
                     int checksum = serialBytes[0] + serialBytes[1];
                     serialBytes[2] = (byte)((checksum & 0xFF00) >> 8);
                     serialBytes[3] = (byte)(checksum & 0xFF);
@@ -2355,7 +2441,7 @@ namespace DVR_Tester_User_Interface
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            UI.Controls.RemoveAt(2);
+            //UI.Controls.RemoveAt(2);
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -2456,31 +2542,28 @@ namespace DVR_Tester_User_Interface
                         case 0x0F:          //Update the Main Power and Ignition Lines
                             if (((readBuffer[2]) & 0x01) == 0x01)
                             {
-                                checkBox6.Checked = true;
-                                checkBox6.Text = "Ignition OFF";
-                                checkBox6.BackColor = Color.Transparent;
-
-                            }
-                            else
-                            {
                                 checkBox6.Checked = false;
                                 checkBox6.Text = "Ignition ON";
                                 checkBox6.BackColor = Color.LightGreen;
-
+                            }
+                            else
+                            {
+                                checkBox6.Checked = true;
+                                checkBox6.Text = "Ignition OFF";
+                                checkBox6.BackColor = Color.Transparent;
                             }
 
                             if (((readBuffer[2]) & 0x02) == 0x02)
                             {
-                                checkBox7.Checked = true;
-                                checkBox7.Text = "Main Power OFF";
-                                checkBox7.BackColor = Color.Transparent;
-
-                            }
-                            else
-                            {
                                 checkBox7.Checked = false;
                                 checkBox7.Text = "Main Power ON";
                                 checkBox7.BackColor = Color.LightGreen;
+                            }
+                            else
+                            {
+                                checkBox7.Checked = true;
+                                checkBox7.Text = "Main Power OFF";
+                                checkBox7.BackColor = Color.Transparent;
 
                             }
                             break;
@@ -2597,7 +2680,36 @@ namespace DVR_Tester_User_Interface
                                 if (((Lines >> i) & 0x0001) != 0x0001)
                                 {
                                     VideoLines[i].Checked = false;
-                                    VideoLines[i].Text = "Video #" + (i + 1).ToString() + " ON";
+                                    switch (i)
+                                    {
+                                        case 1:
+                                            VideoLines[i].Text = "Video #3 ON";
+                                            break;
+                                        case 2:
+                                            VideoLines[i].Text = "Video #2 ON";
+                                            break;
+                                        case 5:
+                                            VideoLines[i].Text = "Video #7 ON";
+                                            break;
+                                        case 6:
+                                            VideoLines[i].Text = "Video #6 ON";
+                                            break;
+                                        case 9:
+                                            VideoLines[i].Text = "Video #11 ON";
+                                            break;
+                                        case 10:
+                                            VideoLines[i].Text = "Video #10 ON";
+                                            break;
+                                        case 13:
+                                            VideoLines[i].Text = "Video #15 ON";
+                                            break;
+                                        case 14:
+                                            VideoLines[i].Text = "Video #14 ON";
+                                            break;
+                                        default:
+                                            VideoLines[i].Text = "Video #" + (i + 1).ToString() + " ON";
+                                            break;
+                                    }
                                     VideoLines[i].BackColor = Color.LightGreen;
                                     if (i == 1)
                                     {
@@ -2607,7 +2719,36 @@ namespace DVR_Tester_User_Interface
                                 else
                                 {
                                     VideoLines[i].Checked = true;
-                                    VideoLines[i].Text = "Video #" + (i + 1).ToString() + " OFF";
+                                    switch (i)
+                                    {
+                                        case 1:
+                                            VideoLines[i].Text = "Video #3 OFF";
+                                            break;
+                                        case 2:
+                                            VideoLines[i].Text = "Video #2 OFF";
+                                            break;
+                                        case 5:
+                                            VideoLines[i].Text = "Video #7 OFF";
+                                            break;
+                                        case 6:
+                                            VideoLines[i].Text = "Video #6 OFF";
+                                            break;
+                                        case 9:
+                                            VideoLines[i].Text = "Video #11 OFF";
+                                            break;
+                                        case 10:
+                                            VideoLines[i].Text = "Video #10 OFF";
+                                            break;
+                                        case 13:
+                                            VideoLines[i].Text = "Video #15 OFF";
+                                            break;
+                                        case 14:
+                                            VideoLines[i].Text = "Video #14 OFF";
+                                            break;
+                                        default:
+                                            VideoLines[i].Text = "Video #" + (i + 1).ToString() + " OFF";
+                                            break;
+                                    }
                                     VideoLines[i].BackColor = Color.Transparent;
                                 }
                             }
@@ -2731,6 +2872,208 @@ namespace DVR_Tester_User_Interface
         {
 
         }
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox31_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (comboBox4.SelectedItem.ToString())
+            {
+                case "Audio":
+                    {
+
+                        checkBox1.Visible = true;
+                        label1.Visible = false;
+                        label14.Visible = false;
+                        textBox1.Visible = false;
+
+                        checkedListBox1.Items.Clear();
+                            checkedListBox1.Items.AddRange(AudioCollection.ToArray());
+                        break;
+                    }
+                case "Video":
+                    {
+
+                        checkBox1.Visible = true;
+                        label1.Visible = false;
+                        label14.Visible = false;
+                        textBox1.Visible = false;
+
+                        checkedListBox1.Items.Clear();
+                        checkedListBox1.Items.AddRange(VideoCollection.ToArray());
+                        break;
+                    }
+                case "Digital":
+                    {
+
+                        checkBox1.Visible = true;
+                        label1.Visible = false;
+                        label14.Visible = false;
+                        textBox1.Visible = false;
+
+                        checkedListBox1.Items.Clear();
+                        checkedListBox1.Items.AddRange(DigitalCollection.ToArray());
+                        break;
+                    }
+                case "Network":
+                    {
+                        checkBox1.Visible = true;
+                        label1.Visible = false;
+                        label14.Visible = false;
+                        textBox1.Visible = false;
+
+                        checkedListBox1.Items.Clear();
+                        checkedListBox1.Items.AddRange(NetworkCollection.ToArray());
+                        break;
+                    }
+                case "Power/IGN":
+                    {
+                        checkBox1.Visible = true;
+                        label1.Visible = false;
+                        label14.Visible = false;
+                        textBox1.Visible = false;
+
+                        checkedListBox1.Items.Clear();
+                        checkedListBox1.Items.AddRange(Power_IGNCollection.ToArray());
+                        break;
+                    }
+                case "Variable Vol.":
+                    {
+                        checkBox1.Visible = false;
+                        label1.Visible = true;
+                        label14.Visible = true;
+                        textBox1.Visible = true;
+
+                        checkedListBox1.Items.Clear();
+                        checkedListBox1.Items.AddRange(VVoltCollection.ToArray());
+                        break;
+                    }
+            }
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (checkBox1.Text == "Enable")
+            {
+                checkBox1.Text = "Disable";
+                checkBox1.BackColor = Color.Transparent;
+            }
+            else
+            {
+                checkBox1.Text = "Enable";
+                checkBox1.BackColor = Color.LightGreen;
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt32(textBox2.Text) > 65535)
+                    textBox2.Text = "65535";
+                if (Convert.ToInt32(textBox2.Text) < 0)
+                    textBox2.Text = "0";
+            }
+            catch
+            {
+                if (textBox2.Text.Length > 0)
+                    textBox2.Text = textBox2.Text.Remove(textBox2.Text.Length - 1);
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt16(textBox1.Text) > 30)
+                    textBox1.Text = "30";
+                if (Convert.ToInt16(textBox1.Text) < 0)
+                    textBox1.Text = "0";
+            }
+            catch
+            {
+                if (textBox1.Text.Length > 0)
+                    textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1);
+            }
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            if (checkedListBox1.CheckedIndices.Count > 0)
+            {
+                if (comboBox4.SelectedItem.ToString() == "Variable Vol.")
+                {
+                    foreach (int index in checkedListBox1.CheckedIndices)
+                        AutoTest.Add(new TestCommand(comboBox4.SelectedItem.ToString(), (Int16)(1 << index), true, Convert.ToInt16(textBox1.Text), Convert.ToInt32(textBox2.Text)));
+                }
+                else
+                {
+                    Int16 lines = 0;
+                    foreach (int index in checkedListBox1.CheckedIndices)
+                        lines = (Int16)(lines | (Int16)(1 << index));
+                    AutoTest.Add(new TestCommand(comboBox4.SelectedItem.ToString(), lines, !(bool)checkBox1.Checked, 0, Convert.ToInt32(textBox2.Text)));
+                }
+                listBox1.Items.Clear();
+                foreach (TestCommand item in AutoTest.ToArray())
+                {
+                    string enable;
+                    if (item.enable) enable = "Enable";
+                    else enable = "Disable";
+
+                    String readableItem;
+                    if (item.name == "Variable Vol.")   readableItem = item.name + " #0x" + item.lines.ToString("X4") + "   Vol:" + item.voltage.ToString() + "   Time: " + item.time.ToString();
+                    else                                readableItem = item.name + " #0x" + item.lines.ToString("X4") + "   " + enable + "   Time: " + item.time.ToString();
+
+                    listBox1.Items.Add(readableItem);
+                }
+            }
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            while(listBox1.SelectedItems.Count > 0)
+            {
+                AutoTest.RemoveAt(listBox1.SelectedIndices[0]);
+                listBox1.Items.RemoveAt(listBox1.SelectedIndices[0]);
+            }
+                listBox1.Items.Clear();
+
+                foreach (TestCommand item in AutoTest.ToArray())
+                {
+                    string enable;
+                    if (item.enable) enable = "Enable";
+                    else enable = "Disable";
+
+                    String readableItem;
+                    if (item.name == "Variable Vol.") readableItem = item.name + " #0x" + item.lines.ToString("X4") + "   Vol:" + item.voltage.ToString() + "   Time: " + item.time.ToString();
+                    else readableItem = item.name + " #0x" + item.lines.ToString("X4") + "   " + enable + "   Time: " + item.time.ToString();
+
+                    listBox1.Items.Add(readableItem);
+                }
+        }
+
+        private void AutoTestNumber_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
     }
     //This class is what holds the definitions for each test input paramater.
     public class Test_Paramater
@@ -2749,5 +3092,22 @@ namespace DVR_Tester_User_Interface
         public long delay;      //Defines how long before the paramater is toggled
         public long timeOn;     //Defines how long the paramater is on before turning off again.
         public long timeOff;    //Defines how long the paramater is off before beginning a new cycle.
+    }
+
+    public class TestCommand
+    {
+        public TestCommand(String nname, Int16 llines, bool eenable, long vvoltage, long ttime)
+        {
+            name = nname;
+            enable = eenable;
+            voltage = vvoltage;
+            lines = llines;
+            time = ttime;
+        }
+        public string name;
+        public bool enable;
+        public long voltage;
+        public Int16 lines;
+        public long time;
     }
 }

@@ -213,39 +213,26 @@
             this.label17 = new System.Windows.Forms.Label();
             this.UI = new System.Windows.Forms.TabControl();
             this.Settings = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
-            this.SaveList = new System.Windows.Forms.ComboBox();
-            this.SaveName = new System.Windows.Forms.TextBox();
-            this.textBox17 = new System.Windows.Forms.TextBox();
-            this.textBox16 = new System.Windows.Forms.TextBox();
-            this.textBox18 = new System.Windows.Forms.TextBox();
-            this.textBox19 = new System.Windows.Forms.TextBox();
-            this.textBox20 = new System.Windows.Forms.TextBox();
-            this.textBox15 = new System.Windows.Forms.TextBox();
-            this.textBox14 = new System.Windows.Forms.TextBox();
-            this.textBox13 = new System.Windows.Forms.TextBox();
-            this.textBox12 = new System.Windows.Forms.TextBox();
-            this.textBox11 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button17 = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label46 = new System.Windows.Forms.Label();
+            this.button16 = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.Relay_Outputs = new System.Windows.Forms.ComboBox();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.DVR_Model = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -255,15 +242,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.Digital_Inputs = new System.Windows.Forms.ComboBox();
-            this.Analog_Inputs = new System.Windows.Forms.ComboBox();
-            this.Video_Channels = new System.Windows.Forms.ComboBox();
-            this.Audio_Channels = new System.Windows.Forms.ComboBox();
+            this.AutoTestNumber = new System.Windows.Forms.ComboBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Manual_Control.SuspendLayout();
             this.Real_Time.SuspendLayout();
@@ -417,26 +396,30 @@
             // checkBox113
             // 
             this.checkBox113.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox113.BackColor = System.Drawing.Color.LightGreen;
+            this.checkBox113.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox113.Checked = true;
+            this.checkBox113.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox113.Location = new System.Drawing.Point(732, 80);
             this.checkBox113.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox113.Name = "checkBox113";
             this.checkBox113.Size = new System.Drawing.Size(129, 27);
             this.checkBox113.TabIndex = 260;
-            this.checkBox113.Text = "Ignition ON";
+            this.checkBox113.Text = "Ignition OFF";
             this.checkBox113.UseVisualStyleBackColor = false;
             this.checkBox113.CheckedChanged += new System.EventHandler(this.checkBox113_CheckedChanged);
             // 
             // checkBox112
             // 
             this.checkBox112.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox112.BackColor = System.Drawing.Color.LightGreen;
+            this.checkBox112.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox112.Checked = true;
+            this.checkBox112.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox112.Location = new System.Drawing.Point(732, 44);
             this.checkBox112.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox112.Name = "checkBox112";
             this.checkBox112.Size = new System.Drawing.Size(129, 27);
             this.checkBox112.TabIndex = 259;
-            this.checkBox112.Text = "Main Power ON";
+            this.checkBox112.Text = "Main Power OFF";
             this.checkBox112.UseVisualStyleBackColor = false;
             this.checkBox112.CheckedChanged += new System.EventHandler(this.checkBox112_CheckedChanged);
             // 
@@ -1531,26 +1514,31 @@
             // checkBox6
             // 
             this.checkBox6.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox6.BackColor = System.Drawing.Color.LightGreen;
+            this.checkBox6.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox6.Checked = true;
+            this.checkBox6.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox6.Location = new System.Drawing.Point(732, 80);
             this.checkBox6.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(129, 27);
             this.checkBox6.TabIndex = 336;
-            this.checkBox6.Text = "Ignition ON";
+            this.checkBox6.Text = "Ignition OFF";
             this.checkBox6.UseVisualStyleBackColor = false;
             // 
             // checkBox7
             // 
             this.checkBox7.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox7.BackColor = System.Drawing.Color.LightGreen;
+            this.checkBox7.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox7.Checked = true;
+            this.checkBox7.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox7.Location = new System.Drawing.Point(732, 44);
             this.checkBox7.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(129, 27);
             this.checkBox7.TabIndex = 335;
-            this.checkBox7.Text = "Main Power ON";
+            this.checkBox7.Text = "Main Power OFF";
             this.checkBox7.UseVisualStyleBackColor = false;
+            this.checkBox7.CheckedChanged += new System.EventHandler(this.checkBox7_CheckedChanged);
             // 
             // label16
             // 
@@ -1899,6 +1887,7 @@
             this.checkBox31.TabIndex = 304;
             this.checkBox31.Text = "Video #15 ON";
             this.checkBox31.UseVisualStyleBackColor = false;
+            this.checkBox31.CheckedChanged += new System.EventHandler(this.checkBox31_CheckedChanged);
             // 
             // checkBox32
             // 
@@ -2649,39 +2638,26 @@
             // Settings
             // 
             this.Settings.BackColor = System.Drawing.Color.White;
-            this.Settings.Controls.Add(this.button1);
-            this.Settings.Controls.Add(this.SaveList);
-            this.Settings.Controls.Add(this.SaveName);
-            this.Settings.Controls.Add(this.textBox17);
-            this.Settings.Controls.Add(this.textBox16);
-            this.Settings.Controls.Add(this.textBox18);
-            this.Settings.Controls.Add(this.textBox19);
-            this.Settings.Controls.Add(this.textBox20);
-            this.Settings.Controls.Add(this.textBox15);
-            this.Settings.Controls.Add(this.textBox14);
-            this.Settings.Controls.Add(this.textBox13);
-            this.Settings.Controls.Add(this.textBox12);
-            this.Settings.Controls.Add(this.textBox11);
-            this.Settings.Controls.Add(this.textBox1);
-            this.Settings.Controls.Add(this.textBox10);
-            this.Settings.Controls.Add(this.textBox9);
-            this.Settings.Controls.Add(this.textBox8);
-            this.Settings.Controls.Add(this.textBox7);
-            this.Settings.Controls.Add(this.textBox6);
-            this.Settings.Controls.Add(this.textBox5);
-            this.Settings.Controls.Add(this.textBox4);
-            this.Settings.Controls.Add(this.textBox3);
-            this.Settings.Controls.Add(this.textBox2);
+            this.Settings.Controls.Add(this.button17);
+            this.Settings.Controls.Add(this.listBox1);
             this.Settings.Controls.Add(this.label15);
+            this.Settings.Controls.Add(this.textBox2);
+            this.Settings.Controls.Add(this.label46);
+            this.Settings.Controls.Add(this.button16);
             this.Settings.Controls.Add(this.label14);
-            this.Settings.Controls.Add(this.label13);
-            this.Settings.Controls.Add(this.checkBox5);
-            this.Settings.Controls.Add(this.Relay_Outputs);
-            this.Settings.Controls.Add(this.button4);
-            this.Settings.Controls.Add(this.button3);
+            this.Settings.Controls.Add(this.textBox1);
+            this.Settings.Controls.Add(this.label1);
+            this.Settings.Controls.Add(this.checkBox1);
+            this.Settings.Controls.Add(this.checkedListBox1);
+            this.Settings.Controls.Add(this.comboBox4);
+            this.Settings.Controls.Add(this.comboBox2);
             this.Settings.Controls.Add(this.label12);
+            this.Settings.Controls.Add(this.button3);
+            this.Settings.Controls.Add(this.button4);
+            this.Settings.Controls.Add(this.checkBox2);
+            this.Settings.Controls.Add(this.button1);
+            this.Settings.Controls.Add(this.label13);
             this.Settings.Controls.Add(this.label6);
-            this.Settings.Controls.Add(this.DVR_Model);
             this.Settings.Controls.Add(this.label11);
             this.Settings.Controls.Add(this.label10);
             this.Settings.Controls.Add(this.label9);
@@ -2691,15 +2667,7 @@
             this.Settings.Controls.Add(this.label4);
             this.Settings.Controls.Add(this.label3);
             this.Settings.Controls.Add(this.label2);
-            this.Settings.Controls.Add(this.label1);
-            this.Settings.Controls.Add(this.checkBox4);
-            this.Settings.Controls.Add(this.checkBox3);
-            this.Settings.Controls.Add(this.checkBox2);
-            this.Settings.Controls.Add(this.checkBox1);
-            this.Settings.Controls.Add(this.Digital_Inputs);
-            this.Settings.Controls.Add(this.Analog_Inputs);
-            this.Settings.Controls.Add(this.Video_Channels);
-            this.Settings.Controls.Add(this.Audio_Channels);
+            this.Settings.Controls.Add(this.AutoTestNumber);
             this.Settings.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.Settings.Location = new System.Drawing.Point(4, 25);
             this.Settings.Margin = new System.Windows.Forms.Padding(4);
@@ -2709,215 +2677,246 @@
             this.Settings.TabIndex = 0;
             this.Settings.Text = "Settings";
             // 
-            // button1
+            // button17
             // 
-            this.button1.Location = new System.Drawing.Point(868, 60);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(167, 23);
-            this.button1.TabIndex = 54;
-            this.button1.Text = "Upload to Micro";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button17.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button17.Location = new System.Drawing.Point(728, 94);
+            this.button17.Margin = new System.Windows.Forms.Padding(4);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(133, 28);
+            this.button17.TabIndex = 213;
+            this.button17.Text = "Remove Selected";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
             // 
-            // SaveList
+            // listBox1
             // 
-            this.SaveList.DisplayMember = "1";
-            this.SaveList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.SaveList.FormattingEnabled = true;
-            this.SaveList.Location = new System.Drawing.Point(759, 143);
-            this.SaveList.Margin = new System.Windows.Forms.Padding(4);
-            this.SaveList.Name = "SaveList";
-            this.SaveList.Size = new System.Drawing.Size(377, 24);
-            this.SaveList.TabIndex = 53;
-            this.SaveList.Tag = "0";
-            this.SaveList.Visible = false;
-            // 
-            // SaveName
-            // 
-            this.SaveName.Location = new System.Drawing.Point(764, 144);
-            this.SaveName.Margin = new System.Windows.Forms.Padding(4);
-            this.SaveName.Name = "SaveName";
-            this.SaveName.Size = new System.Drawing.Size(372, 22);
-            this.SaveName.TabIndex = 52;
-            this.SaveName.Visible = false;
-            // 
-            // textBox17
-            // 
-            this.textBox17.Location = new System.Drawing.Point(469, 80);
-            this.textBox17.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox17.Name = "textBox17";
-            this.textBox17.Size = new System.Drawing.Size(64, 22);
-            this.textBox17.TabIndex = 51;
-            // 
-            // textBox16
-            // 
-            this.textBox16.Location = new System.Drawing.Point(469, 28);
-            this.textBox16.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox16.Name = "textBox16";
-            this.textBox16.Size = new System.Drawing.Size(64, 22);
-            this.textBox16.TabIndex = 50;
-            // 
-            // textBox18
-            // 
-            this.textBox18.Location = new System.Drawing.Point(469, 134);
-            this.textBox18.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox18.Name = "textBox18";
-            this.textBox18.Size = new System.Drawing.Size(64, 22);
-            this.textBox18.TabIndex = 45;
-            // 
-            // textBox19
-            // 
-            this.textBox19.Location = new System.Drawing.Point(469, 185);
-            this.textBox19.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox19.Name = "textBox19";
-            this.textBox19.Size = new System.Drawing.Size(64, 22);
-            this.textBox19.TabIndex = 44;
-            // 
-            // textBox20
-            // 
-            this.textBox20.Location = new System.Drawing.Point(469, 233);
-            this.textBox20.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox20.Name = "textBox20";
-            this.textBox20.Size = new System.Drawing.Size(64, 22);
-            this.textBox20.TabIndex = 43;
-            // 
-            // textBox15
-            // 
-            this.textBox15.Location = new System.Drawing.Point(383, 234);
-            this.textBox15.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox15.Name = "textBox15";
-            this.textBox15.Size = new System.Drawing.Size(64, 22);
-            this.textBox15.TabIndex = 42;
-            // 
-            // textBox14
-            // 
-            this.textBox14.Location = new System.Drawing.Point(383, 186);
-            this.textBox14.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox14.Name = "textBox14";
-            this.textBox14.Size = new System.Drawing.Size(64, 22);
-            this.textBox14.TabIndex = 41;
-            // 
-            // textBox13
-            // 
-            this.textBox13.Location = new System.Drawing.Point(383, 134);
-            this.textBox13.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox13.Name = "textBox13";
-            this.textBox13.Size = new System.Drawing.Size(64, 22);
-            this.textBox13.TabIndex = 40;
-            // 
-            // textBox12
-            // 
-            this.textBox12.Location = new System.Drawing.Point(383, 81);
-            this.textBox12.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(64, 22);
-            this.textBox12.TabIndex = 39;
-            // 
-            // textBox11
-            // 
-            this.textBox11.Location = new System.Drawing.Point(383, 28);
-            this.textBox11.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(64, 22);
-            this.textBox11.TabIndex = 38;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(295, 233);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(64, 22);
-            this.textBox1.TabIndex = 36;
-            // 
-            // textBox10
-            // 
-            this.textBox10.Location = new System.Drawing.Point(199, 421);
-            this.textBox10.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(64, 22);
-            this.textBox10.TabIndex = 28;
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(199, 398);
-            this.textBox9.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(64, 22);
-            this.textBox9.TabIndex = 27;
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(199, 374);
-            this.textBox8.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(64, 22);
-            this.textBox8.TabIndex = 26;
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(199, 353);
-            this.textBox7.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(64, 22);
-            this.textBox7.TabIndex = 25;
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(199, 330);
-            this.textBox6.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(64, 22);
-            this.textBox6.TabIndex = 24;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(295, 185);
-            this.textBox5.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(64, 22);
-            this.textBox5.TabIndex = 12;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(295, 133);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(64, 22);
-            this.textBox4.TabIndex = 11;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(295, 80);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(64, 22);
-            this.textBox3.TabIndex = 10;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(295, 28);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(64, 22);
-            this.textBox2.TabIndex = 9;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 16;
+            this.listBox1.Location = new System.Drawing.Point(728, 124);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBox1.Size = new System.Drawing.Size(388, 452);
+            this.listBox1.TabIndex = 212;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(472, 10);
+            this.label15.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label15.Location = new System.Drawing.Point(867, 67);
             this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(0, 17);
-            this.label15.TabIndex = 49;
+            this.label15.Size = new System.Drawing.Size(32, 17);
+            this.label15.TabIndex = 211;
+            this.label15.Text = "Sec";
+            // 
+            // textBox2
+            // 
+            this.textBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.textBox2.Location = new System.Drawing.Point(801, 65);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(64, 22);
+            this.textBox2.TabIndex = 210;
+            this.textBox2.Text = "0";
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label46.Location = new System.Drawing.Point(767, 66);
+            this.label46.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(39, 17);
+            this.label46.TabIndex = 209;
+            this.label46.Text = "Time";
+            // 
+            // button16
+            // 
+            this.button16.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button16.Location = new System.Drawing.Point(907, 62);
+            this.button16.Margin = new System.Windows.Forms.Padding(4);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(133, 28);
+            this.button16.TabIndex = 208;
+            this.button16.Text = "Add to Test";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button16_Click);
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(379, 9);
+            this.label14.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label14.Location = new System.Drawing.Point(725, 65);
             this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(0, 17);
-            this.label14.TabIndex = 48;
+            this.label14.Size = new System.Drawing.Size(17, 17);
+            this.label14.TabIndex = 207;
+            this.label14.Text = "V";
+            this.label14.Visible = false;
+            this.label14.Click += new System.EventHandler(this.label14_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.textBox1.Location = new System.Drawing.Point(674, 62);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(43, 22);
+            this.textBox1.TabIndex = 206;
+            this.textBox1.Text = "0";
+            this.textBox1.Visible = false;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label1.Location = new System.Drawing.Point(619, 65);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 17);
+            this.label1.TabIndex = 64;
+            this.label1.Text = "Set To";
+            this.label1.Visible = false;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBox1.BackColor = System.Drawing.Color.LightGreen;
+            this.checkBox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.checkBox1.Location = new System.Drawing.Point(628, 59);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(135, 28);
+            this.checkBox1.TabIndex = 63;
+            this.checkBox1.Text = "Enable";
+            this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox1.UseVisualStyleBackColor = false;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
+            // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.checkedListBox1.CheckOnClick = true;
+            this.checkedListBox1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Items.AddRange(new object[] {
+            "Audio #1",
+            "Audio #2",
+            "Audio #3",
+            "Audio #4",
+            "Audio #5",
+            "Audio #6",
+            "Audio #7",
+            "Audio #8",
+            "Audio #9",
+            "Audio #10",
+            "Audio #11",
+            "Audio #12",
+            "Audio #13",
+            "Audio #14",
+            "Audio #15",
+            "Audio #16"});
+            this.checkedListBox1.Location = new System.Drawing.Point(402, 59);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(210, 459);
+            this.checkedListBox1.TabIndex = 62;
+            this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.DisplayMember = "1";
+            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "Audio",
+            "Video",
+            "Digital",
+            "Network",
+            "Power/IGN",
+            "Variable Vol."});
+            this.comboBox4.Location = new System.Drawing.Point(287, 59);
+            this.comboBox4.Margin = new System.Windows.Forms.Padding(4);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(108, 24);
+            this.comboBox4.TabIndex = 61;
+            this.comboBox4.Tag = "0";
+            this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DisplayMember = "1";
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(91, 28);
+            this.comboBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(103, 24);
+            this.comboBox2.TabIndex = 60;
+            this.comboBox2.Tag = "0";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label12.Location = new System.Drawing.Point(8, 32);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(66, 17);
+            this.label12.TabIndex = 59;
+            this.label12.Text = "Com Port";
+            // 
+            // button3
+            // 
+            this.button3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button3.Location = new System.Drawing.Point(123, 59);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(108, 28);
+            this.button3.TabIndex = 58;
+            this.button3.Text = "Disconnect";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button4.Location = new System.Drawing.Point(7, 59);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(108, 28);
+            this.button4.TabIndex = 57;
+            this.button4.Text = "Connect";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoCheck = false;
+            this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox2.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBox2.Enabled = false;
+            this.checkBox2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.checkBox2.Location = new System.Drawing.Point(5, 3);
+            this.checkBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(164, 23);
+            this.checkBox2.TabIndex = 56;
+            this.checkBox2.Text = "Connected";
+            this.checkBox2.UseMnemonic = false;
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button1.Location = new System.Drawing.Point(995, 93);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(121, 28);
+            this.button1.TabIndex = 54;
+            this.button1.Text = "Upload to Micro";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // label13
             // 
@@ -2929,92 +2928,14 @@
             this.label13.TabIndex = 37;
             this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
-            // checkBox5
-            // 
-            this.checkBox5.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(195, 234);
-            this.checkBox5.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(70, 27);
-            this.checkBox5.TabIndex = 35;
-            this.checkBox5.Text = "Enabled";
-            this.checkBox5.UseVisualStyleBackColor = true;
-            this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
-            // 
-            // Relay_Outputs
-            // 
-            this.Relay_Outputs.BackColor = System.Drawing.Color.White;
-            this.Relay_Outputs.DisplayMember = "1";
-            this.Relay_Outputs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Relay_Outputs.FormattingEnabled = true;
-            this.Relay_Outputs.Items.AddRange(new object[] {
-            "Relay Output #1",
-            "Relay Output #2",
-            "Relay Output #3",
-            "Relay Output #4"});
-            this.Relay_Outputs.Location = new System.Drawing.Point(0, 234);
-            this.Relay_Outputs.Margin = new System.Windows.Forms.Padding(4);
-            this.Relay_Outputs.Name = "Relay_Outputs";
-            this.Relay_Outputs.Size = new System.Drawing.Size(165, 24);
-            this.Relay_Outputs.TabIndex = 34;
-            this.Relay_Outputs.Tag = "0";
-            this.Relay_Outputs.SelectedIndexChanged += new System.EventHandler(this.Relay_Outputs_SelectedIndexChanged);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(971, 112);
-            this.button4.Margin = new System.Windows.Forms.Padding(4);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(141, 23);
-            this.button4.TabIndex = 33;
-            this.button4.Text = "Load";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(821, 112);
-            this.button3.Margin = new System.Windows.Forms.Padding(4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(141, 23);
-            this.button3.TabIndex = 32;
-            this.button3.Text = "Save";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // label12
-            // 
-            this.label12.Location = new System.Drawing.Point(759, 89);
-            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(379, 18);
-            this.label12.TabIndex = 31;
-            this.label12.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label12.Click += new System.EventHandler(this.label12_Click);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(881, 9);
+            this.label6.Location = new System.Drawing.Point(18, 98);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(0, 17);
             this.label6.TabIndex = 30;
-            // 
-            // DVR_Model
-            // 
-            this.DVR_Model.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.DVR_Model.FormattingEnabled = true;
-            this.DVR_Model.Items.AddRange(new object[] {
-            "Model #1",
-            "Model #2",
-            "Model #3"});
-            this.DVR_Model.Location = new System.Drawing.Point(868, 27);
-            this.DVR_Model.Margin = new System.Windows.Forms.Padding(4);
-            this.DVR_Model.Name = "DVR_Model";
-            this.DVR_Model.Size = new System.Drawing.Size(165, 24);
-            this.DVR_Model.TabIndex = 29;
             // 
             // label11
             // 
@@ -3064,7 +2985,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(27, 10);
+            this.label5.Location = new System.Drawing.Point(30, 93);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(0, 17);
@@ -3073,7 +2994,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(27, 62);
+            this.label4.Location = new System.Drawing.Point(30, 145);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(0, 17);
@@ -3097,174 +3018,24 @@
             this.label2.Size = new System.Drawing.Size(0, 17);
             this.label2.TabIndex = 14;
             // 
-            // label1
+            // AutoTestNumber
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(295, 9);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 17);
-            this.label1.TabIndex = 13;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(195, 186);
-            this.checkBox4.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(70, 27);
-            this.checkBox4.TabIndex = 8;
-            this.checkBox4.Text = "Enabled";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(195, 134);
-            this.checkBox3.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(70, 27);
-            this.checkBox3.TabIndex = 7;
-            this.checkBox3.Text = "Enabled";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(195, 81);
-            this.checkBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(70, 27);
-            this.checkBox2.TabIndex = 6;
-            this.checkBox2.Text = "Enabled";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(195, 28);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(70, 27);
-            this.checkBox1.TabIndex = 5;
-            this.checkBox1.Text = "Enabled";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // Digital_Inputs
-            // 
-            this.Digital_Inputs.DisplayMember = "1";
-            this.Digital_Inputs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Digital_Inputs.FormattingEnabled = true;
-            this.Digital_Inputs.Items.AddRange(new object[] {
-            "Digital Input #1",
-            "Digital Input #2",
-            "Digital Input #3",
-            "Digital Input #4",
-            "Digital Input #5",
-            "Digital Input #6",
-            "Digital Input #7",
-            "Digital Input #8",
-            "Digital Input #9",
-            "Digital Input #10",
-            "Digital Input #11",
-            "Digital Input #12",
-            "Digital Input #13",
-            "Digital Input #14",
-            "Digital Input #15",
-            "Digital Input #16"});
-            this.Digital_Inputs.Location = new System.Drawing.Point(0, 186);
-            this.Digital_Inputs.Margin = new System.Windows.Forms.Padding(4);
-            this.Digital_Inputs.Name = "Digital_Inputs";
-            this.Digital_Inputs.Size = new System.Drawing.Size(165, 24);
-            this.Digital_Inputs.TabIndex = 4;
-            this.Digital_Inputs.Tag = "0";
-            this.Digital_Inputs.SelectedIndexChanged += new System.EventHandler(this.Digital_Inputs_SelectedIndexChanged);
-            // 
-            // Analog_Inputs
-            // 
-            this.Analog_Inputs.DisplayMember = "1";
-            this.Analog_Inputs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Analog_Inputs.FormattingEnabled = true;
-            this.Analog_Inputs.Items.AddRange(new object[] {
-            "Analog Input #1",
-            "Analog Input #2",
-            "Analog Input #3",
-            "Analog Input #4"});
-            this.Analog_Inputs.Location = new System.Drawing.Point(0, 137);
-            this.Analog_Inputs.Margin = new System.Windows.Forms.Padding(4);
-            this.Analog_Inputs.Name = "Analog_Inputs";
-            this.Analog_Inputs.Size = new System.Drawing.Size(165, 24);
-            this.Analog_Inputs.TabIndex = 3;
-            this.Analog_Inputs.Tag = "0";
-            this.Analog_Inputs.SelectedIndexChanged += new System.EventHandler(this.Analog_Inputs_SelectedIndexChanged);
-            // 
-            // Video_Channels
-            // 
-            this.Video_Channels.DisplayMember = "1";
-            this.Video_Channels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Video_Channels.FormattingEnabled = true;
-            this.Video_Channels.Items.AddRange(new object[] {
-            "Video Channel #1",
-            "Video Channel #2",
-            "Video Channel #3",
-            "Video Channel #4",
-            "Video Channel #5",
-            "Video Channel #6",
-            "Video Channel #7",
-            "Video Channel #8",
-            "Video Channel #9",
-            "Video Channel #10",
-            "Video Channel #11",
-            "Video Channel #12",
-            "Video Channel #13",
-            "Video Channel #14",
-            "Video Channel #15",
-            "Video Channel #16"});
-            this.Video_Channels.Location = new System.Drawing.Point(0, 81);
-            this.Video_Channels.Margin = new System.Windows.Forms.Padding(4);
-            this.Video_Channels.Name = "Video_Channels";
-            this.Video_Channels.Size = new System.Drawing.Size(165, 24);
-            this.Video_Channels.TabIndex = 2;
-            this.Video_Channels.Tag = "0";
-            this.Video_Channels.SelectedIndexChanged += new System.EventHandler(this.Video_Channels_SelectedIndexChanged);
-            // 
-            // Audio_Channels
-            // 
-            this.Audio_Channels.DisplayMember = "1";
-            this.Audio_Channels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Audio_Channels.FormattingEnabled = true;
-            this.Audio_Channels.Items.AddRange(new object[] {
-            "Audio Channel #1",
-            "Audio Channel #2",
-            "Audio Channel #3",
-            "Audio Channel #4",
-            "Audio Channel #5",
-            "Audio Channel #6",
-            "Audio Channel #7",
-            "Audio Channel #8",
-            "Audio Channel #9",
-            "Audio Channel #10",
-            "Audio Channel #11",
-            "Audio Channel #12",
-            "Audio Channel #13",
-            "Audio Channel #14",
-            "Audio Channel #15",
-            "Audio Channel #16"});
-            this.Audio_Channels.Location = new System.Drawing.Point(0, 28);
-            this.Audio_Channels.Margin = new System.Windows.Forms.Padding(4);
-            this.Audio_Channels.Name = "Audio_Channels";
-            this.Audio_Channels.Size = new System.Drawing.Size(165, 24);
-            this.Audio_Channels.TabIndex = 1;
-            this.Audio_Channels.Tag = "0";
-            this.Audio_Channels.SelectedIndexChanged += new System.EventHandler(this.Audio_Channels_SelectedIndexChanged);
+            this.AutoTestNumber.DisplayMember = "1";
+            this.AutoTestNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.AutoTestNumber.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.AutoTestNumber.FormattingEnabled = true;
+            this.AutoTestNumber.Items.AddRange(new object[] {
+            "Test A",
+            "Test B",
+            "Test C",
+            "Test D"});
+            this.AutoTestNumber.Location = new System.Drawing.Point(873, 96);
+            this.AutoTestNumber.Margin = new System.Windows.Forms.Padding(4);
+            this.AutoTestNumber.Name = "AutoTestNumber";
+            this.AutoTestNumber.Size = new System.Drawing.Size(108, 24);
+            this.AutoTestNumber.TabIndex = 1;
+            this.AutoTestNumber.Tag = "0";
+            this.AutoTestNumber.SelectedIndexChanged += new System.EventHandler(this.AutoTestNumber_SelectedIndexChanged);
             // 
             // timer1
             // 
@@ -3482,38 +3253,8 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TabPage Settings;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ComboBox SaveList;
-        private System.Windows.Forms.TextBox SaveName;
-        private System.Windows.Forms.TextBox textBox17;
-        private System.Windows.Forms.TextBox textBox16;
-        private System.Windows.Forms.TextBox textBox18;
-        private System.Windows.Forms.TextBox textBox19;
-        private System.Windows.Forms.TextBox textBox20;
-        private System.Windows.Forms.TextBox textBox15;
-        private System.Windows.Forms.TextBox textBox14;
-        private System.Windows.Forms.TextBox textBox13;
-        private System.Windows.Forms.TextBox textBox12;
-        private System.Windows.Forms.TextBox textBox11;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.CheckBox checkBox5;
-        private System.Windows.Forms.ComboBox Relay_Outputs;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox DVR_Model;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
@@ -3523,15 +3264,24 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.ComboBox AutoTestNumber;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.ComboBox Digital_Inputs;
-        private System.Windows.Forms.ComboBox Analog_Inputs;
-        private System.Windows.Forms.ComboBox Video_Channels;
-        private System.Windows.Forms.ComboBox Audio_Channels;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button button17;
 
     }
 }
