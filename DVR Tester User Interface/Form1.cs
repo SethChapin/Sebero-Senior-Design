@@ -2271,7 +2271,8 @@ namespace DVR_Tester_User_Interface
                     checkBox94.Checked = false;
                     checkBox9.Checked = false;
                     connected = false;
-                    SerialObject.Close();
+                    if (SerialObject != null && SerialObject.IsOpen == true)
+                        SerialObject.Close();
                 }
             }
         }
@@ -2304,7 +2305,8 @@ namespace DVR_Tester_User_Interface
                 checkBox94.Checked = false;
                 checkBox9.Checked = false;
                 connected = false;
-                SerialObject.Close();       //Disconnect from Com Port
+                if (SerialObject != null && SerialObject.IsOpen == true)
+                    SerialObject.Close();       //Disconnect from Com Port
             }
         }
 
@@ -2447,7 +2449,8 @@ namespace DVR_Tester_User_Interface
                     checkBox94.Checked = false;
                     checkBox9.Checked = false;
                     connected = false;
-                    SerialObject.Close();
+                    if (SerialObject != null && SerialObject.IsOpen == true)
+                        SerialObject.Close();
                 }
             }
         }
@@ -2481,7 +2484,8 @@ namespace DVR_Tester_User_Interface
                     checkBox94.Checked = false;
                     checkBox9.Checked = false;
                     connected = false;
-                    SerialObject.Close();
+                    if (SerialObject != null && SerialObject.IsOpen == true)
+                        SerialObject.Close();
                 }
             }
         }
@@ -2493,7 +2497,8 @@ namespace DVR_Tester_User_Interface
                 checkBox94.Checked = false;
                 checkBox9.Checked = false;
                 connected = false;
-                SerialObject.Close();
+                if (SerialObject != null && SerialObject.IsOpen == true)
+                    SerialObject.Close();
             }
         }
 
@@ -2854,7 +2859,8 @@ namespace DVR_Tester_User_Interface
                 checkBox94.Checked = false;
                 checkBox9.Checked = false;
                 connected = false;
-                SerialObject.Close();
+                if (SerialObject != null && SerialObject.IsOpen == true)
+                    SerialObject.Close();
             }
         }
         private void SendMessage(SerialPort SerialOb, byte[] Sender, int Length)    //Used to send any messages by Serial.
@@ -2892,7 +2898,8 @@ namespace DVR_Tester_User_Interface
                 checkBox94.Checked = false;
                 checkBox9.Checked = false;
                 connected = false;
-                SerialObject.Close();
+                if (SerialObject != null && SerialObject.IsOpen == true)
+                    SerialObject.Close();
             }
         }
         private void checkBox111_CheckedChanged(object sender, EventArgs e)
@@ -3054,14 +3061,14 @@ namespace DVR_Tester_User_Interface
                 if (comboBox4.SelectedItem.ToString() == "Variable Vol.")
                 {
                     foreach (int index in checkedListBox1.CheckedIndices)
-                        AutoTest.Add(new TestCommand(comboBox4.SelectedItem.ToString(), (Int16)(1 << index), true, Convert.ToInt16(textBox1.Text), Convert.ToInt32(textBox2.Text)));
+                        AutoTest.Add(new TestCommand(comboBox4.SelectedItem.ToString(), (Int16)(1 << index), true, Convert.ToInt16(textBox1.Text), Convert.ToInt16(textBox2.Text)));
                 }
                 else
                 {
                     Int16 lines = 0;
                     foreach (int index in checkedListBox1.CheckedIndices)
                         lines = (Int16)(lines | (Int16)(1 << index));
-                    AutoTest.Add(new TestCommand(comboBox4.SelectedItem.ToString(), lines, !(bool)checkBox1.Checked, 0, Convert.ToInt32(textBox2.Text)));
+                    AutoTest.Add(new TestCommand(comboBox4.SelectedItem.ToString(), lines, !(bool)checkBox1.Checked, 0, Convert.ToInt16(textBox2.Text)));
                 }
                 listBox1.Items.Clear();
                 foreach (TestCommand item in AutoTest.ToArray())
@@ -3106,6 +3113,226 @@ namespace DVR_Tester_User_Interface
         {
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            int j = 0;              //message size counter
+            byte[] sentSerialBytes = new byte[12];      //message sender byte array
+            sentSerialBytes[0] = 0x30;
+            sentSerialBytes[1] = (byte)(AutoTestNumber.SelectedIndex+0x0A);
+            j += 2;
+            int checksum = sentSerialBytes[0] + sentSerialBytes[1];
+            sentSerialBytes[j] = (byte)(checksum >> 8);
+            j++;
+            sentSerialBytes[j] = (byte)(checksum &0x00ff);
+            j++;
+            sentSerialBytes[j] = 0xff;
+            j++;
+            try
+            {
+                SerialObject.Write(sentSerialBytes, 0, j);    //Send the message.
+            }
+            catch
+            {
+                checkBox94.Checked = false;
+                checkBox9.Checked = false;
+                connected = false;
+                if (SerialObject != null && SerialObject.IsOpen == true)
+                    SerialObject.Close();
+            }
+
+            j = 0;
+            byte[] Sender = new byte[12];
+            foreach (TestCommand command in AutoTest)
+            {
+                j = 0;
+                Sender[j] = 0x32;
+                j++;
+                Sender[j] = (byte)(AutoTestNumber.SelectedIndex + 0x0A);
+                j++;
+                switch(command.name)
+                {
+                    case "Audio":
+                        {
+                            if(command.enable)              //Setting the command type
+                            {
+                                Sender[j] = 0x26;
+                            }else{
+                                Sender[j] = 0x16;
+                            }
+                            j++;
+
+                            Sender[j] = (byte)(command.time>>8);   //Setting the activation time
+                            j++;
+                            Sender[j] = (byte)(command.time & 0x00ff);
+                            j++;
+
+                            Sender[j] = (byte)(command.lines >> 8);     //Setting the ports to activate.
+                            j++;
+                            Sender[j] = (byte)(command.lines & 0x00ff);
+                            j++;
+
+                            break;
+                        }
+                    case "Video":
+                        {
+                            if (command.enable)              //Setting the command type
+                            {
+                                Sender[j] = 0x24;
+                            }
+                            else
+                            {
+                                Sender[j] = 0x14;
+                            }
+                            j++;
+
+                            Sender[j] = (byte)(command.time >> 8);   //Setting the activation time
+                            j++;
+                            Sender[j] = (byte)(command.time & 0x00ff);
+                            j++;
+
+                            Sender[j] = (byte)(command.lines >> 8);     //Setting the ports to activate.
+                            j++;
+                            Sender[j] = (byte)(command.lines & 0x00ff);
+                            j++;
+                            break;
+                        }
+                    case "Digital":
+                        {
+                            if (command.enable)              //Setting the command type
+                            {
+                                Sender[j] = 0x20;
+                            }
+                            else
+                            {
+                                Sender[j] = 0x10;
+                            }
+                            j++;
+
+                            Sender[j] = (byte)(command.time >> 8);   //Setting the activation time
+                            j++;
+                            Sender[j] = (byte)(command.time & 0x00ff);
+                            j++;
+
+                            Sender[j] = (byte)(command.lines >> 8);     //Setting the ports to activate.
+                            j++;
+                            Sender[j] = (byte)(command.lines & 0x00ff);
+                            j++;
+                            break;
+                        }
+                    case "Network":
+                        {
+                            if (command.enable)              //Setting the command type
+                            {
+                                Sender[j] = 0x28;
+                            }
+                            else
+                            {
+                                Sender[j] = 0x18;
+                            }
+                            j++;
+
+                            Sender[j] = (byte)(command.time >> 8);   //Setting the activation time
+                            j++;
+                            Sender[j] = (byte)(command.time & 0x00ff);
+                            j++;
+
+                            Sender[j] = (byte)(command.lines >> 8);     //Setting the ports to activate.
+                            j++;
+                            Sender[j] = (byte)(command.lines & 0x00ff);
+                            j++;
+                            break;
+                        }
+                    case "Power/IGN":
+                        {
+                            if (command.enable)              //Setting the command type
+                            {
+                                Sender[j] = 0x2E;
+                            }
+                            else
+                            {
+                                Sender[j] = 0x0E;
+                            }
+                            j++;
+
+                            Sender[j] = (byte)(command.time >> 8);   //Setting the activation time
+                            j++;
+                            Sender[j] = (byte)(command.time & 0x00ff);
+                            j++;
+
+                            Sender[j] = (byte)(command.lines >> 8);     //Setting the ports to activate.
+                            j++;
+                            Sender[j] = (byte)(command.lines & 0x00ff);
+                            j++;
+                            break;
+                        }
+                    case "Variable Vol.":
+                        {
+                           
+                            Sender[j] = 0x1A;                                  //Setting the command type
+                            j++;
+
+                            Sender[j] = (byte)(command.time >> 8);             //Setting the activation time
+                            j++;
+                            Sender[j] = (byte)(command.time & 0x00ff);
+                            j++;
+
+                            Sender[j] = (byte)(command.lines & 0x00ff);        //Setting the ports to activate.
+                            j++;
+
+                            Sender[j] = (byte)(command.voltage & 0x00ff);      //Setting the desired voltage level
+                            j++;
+                            break;
+                        }
+                }
+                checksum = 0;
+                for (int i = 0; i < j; i++)
+                    checksum = checksum + Sender[i];
+                Sender[j] = (byte)(checksum >> 8);
+                j++;
+                Sender[j] = (byte)(checksum & 0x00ff);
+                j++;
+                Sender[j] = 0xff;
+                j++;
+                int Length = j;
+                j = 0;
+                for (int i = 0; i < (Length-1); ++i)        //search through all of the message except the end 0xFF byte.
+                {
+                    sentSerialBytes[j] = Sender[i];
+                    if (sentSerialBytes[j] == 0xFF)         //If an 0xFF byte is found
+                    {
+                        sentSerialBytes[j] = 0xCD;
+                        j++;
+                        sentSerialBytes[j] = 0x55;         //Repalce with 0xCD55
+                    }
+                    else if (sentSerialBytes[j] == 0xCD)   //If a 0xCD byte is found
+                    {
+                        j++;
+                        sentSerialBytes[j] = 0xAA;        //Add a 0xAA byte
+                    }
+                    else
+                    {
+                        sentSerialBytes[j] = Sender[i];  //Transfer byte to new sender array.
+                    }
+                    j++;
+                }
+                sentSerialBytes[j] = 0xFF;
+                j++;
+                try
+                {
+                    SerialObject.Write(sentSerialBytes, 0, j);    //Send the message.
+                }
+                catch
+                {
+                    checkBox94.Checked = false;
+                    checkBox9.Checked = false;
+                    connected = false;
+                    if (SerialObject != null && SerialObject.IsOpen == true)
+                        SerialObject.Close();
+                }
+            }
+        }
+
     }
     //This class is what holds the definitions for each test input paramater.
     public class Test_Paramater
@@ -3128,7 +3355,7 @@ namespace DVR_Tester_User_Interface
 
     public class TestCommand
     {
-        public TestCommand(String nname, Int16 llines, bool eenable, long vvoltage, long ttime)
+        public TestCommand(String nname, Int16 llines, bool eenable, Int16 vvoltage, Int16 ttime)
         {
             name = nname;
             enable = eenable;
@@ -3138,8 +3365,8 @@ namespace DVR_Tester_User_Interface
         }
         public string name;
         public bool enable;
-        public long voltage;
+        public Int16 voltage;
         public Int16 lines;
-        public long time;
+        public Int16 time;
     }
 }
